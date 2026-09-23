@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0A1128">
+<meta name="description" content="Stride — Gauteng's premium running app. Track runs, hydrate, earn badges.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Stride">
+<title>Stride • Gauteng Runners</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230A1128'/%3E%3Ctext x='50' y='68' font-size='58' text-anchor='middle'%3E%F0%9F%8F%83%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Fraunces:opsz,wght@9..144,600;9..144,800&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* PREMIUM PALETTE — deep navy, gold, emerald, sapphire */
+  --navy-900: #050B1E;
+  --navy-800: #0A1128;
+  --navy-700: #111A38;
+  --navy-600: #1A2550;
+  --navy-500: #263468;
+
+  --gold-500: #C9A961;
+  --gold-400: #E0BF7C;
+  --gold-300: #F0D9A0;
+  --gold-glow: rgba(201, 169, 97, 0.4);
+
+  --emerald-600: #0F766E;
+  --emerald-500: #14B8A6;
+  --emerald-400: #2DD4BF;
+  --emerald-300: #5EEAD4;
+
+  --sapphire-600: #1E40AF;
+  --sapphire-500: #3B82F6;
+  --sapphire-400: #60A5FA;
+  --sapphire-300: #93C5FD;
+
+  --ruby-500: #E11D48;
+  --ruby-400: #FB7185;
+
+  --cream: #F7F3EA;
+  --text: #F7F3EA;
+  --text-muted: #94A3B8;
+  --text-dim: #64748B;
+
+  --card-bg: linear-gradient(155deg, rgba(26, 37, 80, 0.85), rgba(10, 17, 40, 0.95));
+  --card-border: rgba(201, 169, 97, 0.18);
+  --card-border-hover: rgba(201, 169, 97, 0.4);
+
+  --radius: 24px;
+  --radius-sm: 16px;
+  --radius-xs: 12px;
+
+  --shadow-premium: 0 20px 40px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(201, 169, 97, 0.06);
+  --shadow-gold: 0 8px 24px -6px rgba(201, 169, 97, 0.45);
+  --shadow-emerald: 0 8px 24px -6px rgba(20, 184, 166, 0.45);
+  --shadow-sapphire: 0 8px 24px -6px rgba(59, 130, 246, 0.45);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { overscroll-behavior: none; }
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  background: var(--navy-900);
+  background-image:
+    radial-gradient(ellipse at top left, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom right, rgba(201, 169, 97, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at top right, rgba(20, 184, 166, 0.08) 0%, transparent 50%);
+  background-attachment: fixed;
+  color: var(--text);
+  line-height: 1.5;
+  padding-bottom: 100px;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+.container { max-width: 520px; margin: 0 auto; padding: 0 20px; }
+
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; }
+h1 { font-size: 2rem; color: var(--cream); }
+h2 { font-size: 1.5rem; margin-bottom: 6px; color: var(--cream); }
+h3 { font-size: 1.15rem; color: var(--cream); }
+p { color: var(--text-muted); }
+button, input, select { font-family: inherit; }
+button { cursor: pointer; border: none; }
+
+/* ============ HEADER ============ */
+header {
+  background: linear-gradient(180deg, rgba(5, 11, 30, 0.98), rgba(10, 17, 40, 0.92));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: var(--cream);
+  padding: 14px 0;
+  position: sticky; top: 0; z-index: 50;
+  border-bottom: 1px solid var(--card-border);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+.header-inner { display: flex; align-items: center; justify-content: space-between; }
+.logo {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Fraunces', serif; font-weight: 800; font-size: 1.5rem;
+  color: var(--cream); text-decoration: none; letter-spacing: -0.02em;
+}
+.logo-mark {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-500), var(--gold-300));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.15rem;
+  box-shadow: 0 0 20px var(--gold-glow), inset 0 0 0 1px rgba(255,255,255,0.2);
+}
+.header-user { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; }
+.avatar-mini {
+  width: 38px; height: 38px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.35rem;
+  border: 2px solid var(--gold-400);
+  background: linear-gradient(135deg, var(--navy-600), var(--navy-700));
+  box-shadow: 0 0 12px var(--gold-glow);
+}
+
+.gp-bar {
+  background: linear-gradient(90deg, rgba(20, 184, 166, 0.12), rgba(201, 169, 97, 0.08), rgba(20, 184, 166, 0.12));
+  color: var(--emerald-300);
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 7px 0;
+  text-align: center;
+  letter-spacing: 0.4px;
+  border-top: 1px solid rgba(20, 184, 166, 0.15);
+}
+.gp-bar i { color: var(--gold-400); margin-right: 5px; }
+
+/* ============ SCREENS ============ */
+.screen { display: none; padding: 24px 0; }
+.screen.active { display: block; animation: screenFade 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes screenFade {
+  from { opacity: 0; transform: translateY(12px) scale(0.99); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ============ AUTH ============ */
+.auth-wrap { padding: 30px 0 20px; text-align: center; }
+.auth-hero {
+  width: 88px; height: 88px; margin: 0 auto 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-500), var(--gold-300), var(--gold-500));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.6rem;
+  box-shadow:
+    0 0 40px var(--gold-glow),
+    0 0 0 6px rgba(201, 169, 97, 0.1),
+    0 0 0 12px rgba(201, 169, 97, 0.05),
+    inset 0 0 30px rgba(255, 255, 255, 0.2);
+  animation: heroPulse 3s ease-in-out infinite;
+}
+@keyframes heroPulse {
+  0%, 100% { box-shadow: 0 0 40px var(--gold-glow), 0 0 0 6px rgba(201, 169, 97, 0.1), 0 0 0 12px rgba(201, 169, 97, 0.05), inset 0 0 30px rgba(255,255,255,0.2); }
+  50% { box-shadow: 0 0 60px var(--gold-glow), 0 0 0 8px rgba(201, 169, 97, 0.15), 0 0 0 16px rgba(201, 169, 97, 0.08), inset 0 0 40px rgba(255,255,255,0.3); }
+}
+.auth-wrap h1 {
+  background: linear-gradient(135deg, var(--gold-300), var(--gold-500), var(--gold-400));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+  font-size: 2.1rem;
+}
+.auth-wrap > p { margin-bottom: 24px; font-size: 0.95rem; }
+
+.avatar-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 18px 0; }
+.avatar-option {
+  aspect-ratio: 1; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.9rem; border: 3px solid transparent;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  position: relative;
+  cursor: pointer;
+}
+.avatar-option.selected {
+  border-color: var(--gold-400);
+  transform: scale(1.1);
+  box-shadow: 0 0 20px var(--gold-glow), 0 0 0 4px rgba(201, 169, 97, 0.15);
+}
+.avatar-option.cheetah { background: linear-gradient(135deg, #FFD9A8, #FFB347); }
+.avatar-option.sloth   { background: linear-gradient(135deg, #D9C3A5, #A08868); }
+.avatar-option.bird    { background: linear-gradient(135deg, #93C5FD, #3B82F6); }
+.avatar-option.lion    { background: linear-gradient(135deg, #FFD97D, #E8A317); }
+.avatar-option.tiger   { background: linear-gradient(135deg, #FFA07A, #E76F51); }
+.avatar-name { font-size: 0.66rem; text-align: center; margin-top: 6px; color: var(--text-muted); font-weight: 700; letter-spacing: 0.3px; }
+
+input, select {
+  width: 100%; padding: 15px 20px;
+  border-radius: 60px;
+  border: 2px solid rgba(201, 169, 97, 0.15);
+  font-size: 1rem;
+  background: rgba(5, 11, 30, 0.6);
+  outline: none;
+  color: var(--cream);
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+input::placeholder { color: var(--text-dim); }
+input:focus, select:focus {
+  border-color: var(--gold-400);
+  box-shadow: 0 0 0 4px rgba(201, 169, 97, 0.15);
+  background: rgba(5, 11, 30, 0.85);
+}
+label { display: block; text-align: left; font-size: 0.8rem; font-weight: 700; color: var(--gold-300); margin: 14px 0 6px; letter-spacing: 0.5px; text-transform: uppercase; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 15px 26px; border-radius: 60px; font-weight: 800;
+  font-size: 1rem; transition: transform 0.15s, box-shadow 0.2s;
+  width: 100%; letter-spacing: 0.2px;
+}
+.btn:active { transform: scale(0.97); }
+
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold-500), var(--gold-300), var(--gold-400));
+  color: var(--navy-900);
+  box-shadow: var(--shadow-gold);
+}
+.btn-gold:hover { box-shadow: 0 12px 32px -6px rgba(201, 169, 97, 0.6); }
+
+.btn-emerald {
+  background: linear-gradient(135deg, var(--emerald-600), var(--emerald-500), var(--emerald-400));
+  color: var(--navy-900);
+  box-shadow: var(--shadow-emerald);
+}
+.btn-emerald:hover { box-shadow: 0 12px 32px -6px rgba(20, 184, 166, 0.6); }
+
+.btn-sapphire {
+  background: linear-gradient(135deg, var(--sapphire-600), var(--sapphire-500), var(--sapphire-400));
+  color: white;
+  box-shadow: var(--shadow-sapphire);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--gold-300);
+  border: 2px solid rgba(201, 169, 97, 0.3);
+}
+.btn-outline:hover { border-color: var(--gold-400); background: rgba(201, 169, 97, 0.05); }
+
+.btn-danger {
+  background: linear-gradient(135deg, #B91C1C, var(--ruby-500));
+  color: white;
+  box-shadow: 0 8px 24px -6px rgba(225, 29, 72, 0.5);
+}
+.btn-sm { padding: 10px 18px; font-size: 0.85rem; width: auto; }
+
+.form-msg { margin-top: 12px; font-weight: 600; min-height: 20px; font-size: 0.88rem; text-align: center; }
+.error { color: var(--ruby-400); }
+.success { color: var(--emerald-400); }
+
+/* ============ CARDS ============ */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow-premium);
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 169, 97, 0.3), transparent);
+}
+.card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; gap: 8px; }
+.card-header h2, .card-header h3 { color: var(--cream); }
+.card-header .icon-wrap {
+  width: 38px; height: 38px; border-radius: 12px;
+  background: linear-gradient(135deg, rgba(201, 169, 97, 0.2), rgba(201, 169, 97, 0.08));
+  border: 1px solid rgba(201, 169, 97, 0.25);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold-400);
+  font-size: 1rem;
+  margin-right: 12px;
+}
+
+/* ============ PROGRESS RING ============ */
+.ring-wrap { position: relative; width: 180px; height: 180px; margin: 8px auto 20px; }
+.ring-wrap svg { transform: rotate(-90deg); filter: drop-shadow(0 0 12px rgba(201, 169, 97, 0.3)); }
+.ring-bg { fill: none; stroke: rgba(201, 169, 97, 0.1); stroke-width: 12; }
+.ring-fg { fill: none; stroke: url(#premiumGradient); stroke-width: 12; stroke-linecap: round; transition: stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+.ring-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.ring-text .big {
+  font-family: 'Fraunces', serif;
+  font-size: 2.4rem; font-weight: 800;
+  background: linear-gradient(135deg, var(--gold-300), var(--gold-500));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+}
+.ring-text .sub { font-size: 0.78rem; color: var(--text-muted); margin-top: 6px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+
+/* ============ WATER HUMANOID ============ */
+.water-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 20px;
+  padding: 8px 0;
+}
+.humanoid-wrap {
+  position: relative;
+  width: 110px;
+  height: 220px;
+  flex-shrink: 0;
+}
+.humanoid {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+}
+.humanoid-outline {
+  fill: rgba(59, 130, 246, 0.08);
+  stroke: var(--sapphire-400);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 10px rgba(96, 165, 250, 0.5));
+  transition: stroke 0.3s;
+}
+.humanoid-fill-clip {
+  clip-path: url(#humanClip);
+}
+.humanoid-fill {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: linear-gradient(180deg, var(--sapphire-400) 0%, var(--sapphire-500) 50%, var(--sapphire-600) 100%);
+  height: 0%;
+  transition: height 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 4px;
+}
+.humanoid-fill::before {
+  content: '';
+  position: absolute;
+  top: -6px; left: 0; right: 0; height: 12px;
+  background: radial-gradient(ellipse at center, rgba(147, 197, 253, 0.9), transparent 70%);
+  animation: waterWave 2.5s ease-in-out infinite;
+}
+@keyframes waterWave {
+  0%, 100% { transform: translateY(0) scaleX(1); }
+  50% { transform: translateY(-3px) scaleX(1.05); }
+}
+
+.water-info { flex: 1; }
+.water-count {
+  font-family: 'Fraunces', serif;
+  font-size: 2.4rem; font-weight: 800;
+  background: linear-gradient(135deg, var(--sapphire-300), var(--sapphire-500));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+}
+.water-label { color: var(--text-muted); font-size: 0.82rem; font-weight: 600; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+.water-glass-track {
+  display: flex; gap: 4px; margin-top: 14px; flex-wrap: wrap;
+}
+.water-glass {
+  width: 18px; height: 22px;
+  border-radius: 3px;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(96, 165, 250, 0.25);
+  transition: all 0.3s;
+}
+.water-glass.full {
+  background: linear-gradient(180deg, var(--sapphire-400), var(--sapphire-600));
+  border-color: var(--sapphire-400);
+  box-shadow: 0 0 8px rgba(96, 165, 250, 0.6);
+}
+
+/* ============ STATS ============ */
+.stat-row { display: flex; gap: 10px; margin-bottom: 14px; }
+.stat {
+  flex: 1; border-radius: var(--radius-sm);
+  padding: 14px 8px; text-align: center;
+  background: linear-gradient(155deg, rgba(26, 37, 80, 0.7), rgba(10, 17, 40, 0.9));
+  border: 1px solid rgba(201, 169, 97, 0.12);
+  position: relative; overflow: hidden;
+}
+.stat::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, currentColor, transparent);
+  opacity: 0.5;
+}
+.stat.gold { color: var(--gold-400); }
+.stat.emerald { color: var(--emerald-400); }
+.stat.sapphire { color: var(--sapphire-400); }
+.stat .num {
+  font-family: 'Fraunces', serif;
+  font-size: 1.5rem; font-weight: 800;
+  color: currentColor;
+  line-height: 1.1;
+}
+.stat .lbl { font-size: 0.66rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.6px; margin-top: 4px; font-weight: 700; }
+
+/* ============ BADGES ============ */
+.badge-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.badge {
+  aspect-ratio: 1; border-radius: 18px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 8px;
+  font-size: 1.7rem;
+  background: linear-gradient(155deg, rgba(26, 37, 80, 0.5), rgba(10, 17, 40, 0.7));
+  border: 1px solid rgba(201, 169, 97, 0.1);
+  transition: transform 0.2s;
+}
+.badge.earned {
+  background: linear-gradient(155deg, rgba(201, 169, 97, 0.25), rgba(201, 169, 97, 0.08));
+  border-color: var(--gold-400);
+  box-shadow: 0 0 16px rgba(201, 169, 97, 0.3), inset 0 0 20px rgba(201, 169, 97, 0.1);
+}
+.badge.earned.emerald {
+  background: linear-gradient(155deg, rgba(20, 184, 166, 0.25), rgba(20, 184, 166, 0.08));
+  border-color: var(--emerald-400);
+  box-shadow: 0 0 16px rgba(20, 184, 166, 0.3), inset 0 0 20px rgba(20, 184, 166, 0.1);
+}
+.badge.earned.sapphire {
+  background: linear-gradient(155deg, rgba(59, 130, 246, 0.25), rgba(59, 130, 246, 0.08));
+  border-color: var(--sapphire-400);
+  box-shadow: 0 0 16px rgba(59, 130, 246, 0.3), inset 0 0 20px rgba(59, 130, 246, 0.1);
+}
+.badge.locked { opacity: 0.35; }
+.badge .badge-label { font-size: 0.58rem; font-weight: 800; color: var(--gold-300); margin-top: 4px; line-height: 1.1; letter-spacing: 0.3px; text-transform: uppercase; }
+
+/* ============ BOTTOM NAV ============ */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(180deg, rgba(10, 17, 40, 0.9), rgba(5, 11, 30, 0.98));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  border-top: 1px solid var(--card-border);
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.5);
+  z-index: 60;
+  padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+}
+.nav-item {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; gap: 3px; padding: 8px 4px;
+  background: none; color: var(--text-dim);
+  font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.3px;
+  transition: color 0.25s;
+  position: relative;
+}
+.nav-item i { font-size: 1.25rem; transition: transform 0.25s; }
+.nav-item.active { color: var(--gold-400); }
+.nav-item.active i { transform: translateY(-2px); }
+.nav-item.active::after {
+  content: '';
+  position: absolute; top: 0; left: 25%; right: 25%; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold-400), transparent);
+  border-radius: 2px;
+}
+
+/* ============ RUNNING MAN TRANSITION ============ */
+.runner-transition {
+  position: fixed; inset: 0;
+  background: linear-gradient(135deg, rgba(5, 11, 30, 0.92), rgba(10, 17, 40, 0.95));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.runner-transition.active { display: flex; animation: runnerFade 1s ease forwards; }
+@keyframes runnerFade {
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { opacity: 0; }
+}
+.runner-stage {
+  position: relative;
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+}
+.runner-figure {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 3.5rem;
+  animation: runAcross 1s cubic-bezier(0.5, 0, 0.5, 1) forwards;
+  filter: drop-shadow(0 0 20px var(--gold-glow));
+}
+@keyframes runAcross {
+  0% { left: -80px; transform: translateY(-50%) scaleX(1); }
+  40% { transform: translateY(-60%) scaleX(1) rotate(-3deg); }
+  60% { transform: translateY(-40%) scaleX(1) rotate(3deg); }
+  100% { left: calc(100% + 20px); transform: translateY(-50%) scaleX(1); }
+}
+.runner-trail {
+  position: absolute;
+  top: 50%; height: 2px; width: 60px;
+  background: linear-gradient(90deg, transparent, var(--gold-400));
+  transform: translateY(-50%);
+  animation: trailAcross 1s cubic-bezier(0.5, 0, 0.5, 1) forwards;
+  opacity: 0.6;
+}
+@keyframes trailAcross {
+  0% { left: -60px; }
+  100% { left: calc(100% + 20px); }
+}
+.runner-label {
+  position: absolute;
+  bottom: 20px; left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Fraunces', serif;
+  font-size: 0.9rem; font-weight: 800;
+  color: var(--gold-300);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+/* ============ SOS ============ */
+.sos-fab {
+  position: fixed; bottom: 108px; right: 18px;
+  width: 66px; height: 66px; border-radius: 50%;
+  background: linear-gradient(135deg, #B91C1C, var(--ruby-500));
+  color: white;
+  font-size: 0.78rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 10px 30px rgba(225, 29, 72, 0.6), 0 0 0 4px rgba(225, 29, 72, 0.15);
+  z-index: 55; flex-direction: column; line-height: 1;
+  animation: sosPulse 2.2s infinite;
+  letter-spacing: 0.5px;
+}
+.sos-fab i { font-size: 1.2rem; margin-bottom: 2px; }
+@keyframes sosPulse {
+  0%, 100% { box-shadow: 0 10px 30px rgba(225, 29, 72, 0.6), 0 0 0 4px rgba(225, 29, 72, 0.15); }
+  50% { box-shadow: 0 10px 40px rgba(225, 29, 72, 0.95), 0 0 0 12px rgba(225, 29, 72, 0.08); }
+}
+
+/* ============ MODAL ============ */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(5, 11, 30, 0.75);
+  z-index: 100; display: none; align-items: center; justify-content: center;
+  padding: 20px; backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: linear-gradient(155deg, var(--navy-700), var(--navy-800));
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 26px 24px; width: 100%; max-width: 420px;
+  max-height: 88vh; overflow-y: auto;
+  animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(201, 169, 97, 0.1);
+}
+@keyframes modalPop {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.modal h2 { color: var(--cream); font-family: 'Fraunces', serif; }
+.modal-actions { display: flex; gap: 10px; margin-top: 22px; }
+.modal-actions .btn { flex: 1; }
+
+/* ============ ROUTE ============ */
+.route-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px;
+  background: linear-gradient(155deg, rgba(20, 184, 166, 0.08), rgba(20, 184, 166, 0.02));
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.2s;
+  border: 1px solid rgba(20, 184, 166, 0.15);
+  border-left: 3px solid var(--emerald-500);
+}
+.route-item:active { transform: scale(0.99); }
+.route-item.water { border-left-color: var(--sapphire-500); background: linear-gradient(155deg, rgba(59, 130, 246, 0.08), rgba(59, 130, 246, 0.02)); }
+.route-item.gold { border-left-color: var(--gold-500); background: linear-gradient(155deg, rgba(201, 169, 97, 0.08), rgba(201, 169, 97, 0.02)); }
+.route-item i.route-icon { color: var(--emerald-400); font-size: 1.25rem; width: 24px; }
+.route-item.water i.route-icon { color: var(--sapphire-400); }
+.route-item.gold i.route-icon { color: var(--gold-400); }
+.route-info { flex: 1; }
+.route-info strong { display: block; color: var(--cream); font-size: 0.92rem; font-weight: 700; }
+.route-info small { color: var(--text-muted); font-size: 0.74rem; }
+.route-arrow { color: var(--gold-400); font-size: 0.85rem; opacity: 0.6; }
+
+/* ============ WATER BANNER ============ */
+.water-banner {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(147, 197, 253, 0.1));
+  border: 1px solid rgba(96, 165, 250, 0.3);
+  color: var(--sapphire-300);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px; display: flex; align-items: center;
+  gap: 12px; margin-bottom: 14px; font-weight: 700; font-size: 0.88rem;
+  backdrop-filter: blur(8px);
+}
+.water-banner i { font-size: 1.5rem; color: var(--sapphire-400); }
+.water-banner button { margin-left: auto; flex-shrink: 0; }
+
+/* ============ CHALLENGE ============ */
+.challenge {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px; background: rgba(26, 37, 80, 0.4);
+  border-radius: var(--radius-sm); margin-bottom: 10px;
+  border: 1px solid rgba(201, 169, 97, 0.1);
+}
+.challenge-avatar { font-size: 1.8rem; }
+.challenge-info { flex: 1; }
+.challenge-info strong { display: block; color: var(--cream); font-size: 0.9rem; font-weight: 700; }
+.challenge-info small { color: var(--text-muted); font-size: 0.74rem; }
+.challenge-bar { height: 6px; background: rgba(201, 169, 97, 0.1); border-radius: 6px; margin-top: 6px; overflow: hidden; }
+.challenge-bar div { height: 100%; background: linear-gradient(90deg, var(--gold-500), var(--gold-300)); border-radius: 6px; transition: width 0.5s; }
+
+.empty { text-align: center; padding: 32px 12px; color: var(--text-muted); }
+.empty i { font-size: 2.4rem; color: var(--gold-400); margin-bottom: 12px; display: block; opacity: 0.7; }
+
+.toast {
+  position: fixed; bottom: 118px; left: 50%; transform: translateX(-50%) translateY(30px);
+  background: linear-gradient(135deg, var(--navy-600), var(--navy-700));
+  border: 1px solid var(--card-border);
+  color: var(--cream);
+  padding: 13px 24px; border-radius: 60px;
+  font-size: 0.88rem; font-weight: 700;
+  box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.6);
+  opacity: 0; pointer-events: none;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 200; max-width: 90vw; text-align: center;
+  backdrop-filter: blur(12px);
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.hint { font-size: 0.78rem; color: var(--text-muted); margin-top: 8px; }
+.divider { height: 1px; background: linear-gradient(90deg, transparent, var(--card-border), transparent); margin: 18px 0; }
+.pill {
+  display: inline-block; padding: 4px 12px; border-radius: 30px;
+  font-size: 0.68rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+.pill.gold { background: rgba(201, 169, 97, 0.15); color: var(--gold-300); border: 1px solid rgba(201, 169, 97, 0.3); }
+.pill.emerald { background: rgba(20, 184, 166, 0.15); color: var(--emerald-300); border: 1px solid rgba(20, 184, 166, 0.3); }
+.pill.sapphire { background: rgba(59, 130, 246, 0.15); color: var(--sapphire-300); border: 1px solid rgba(59, 130, 246, 0.3); }
+
+.last-run {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px; background: linear-gradient(135deg, rgba(201, 169, 97, 0.12), rgba(201, 169, 97, 0.04));
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--gold-500);
+}
+.last-run .lr-icon { font-size: 1.8rem; }
+.last-run .lr-info { flex: 1; }
+.last-run .lr-info strong { display: block; color: var(--gold-300); font-size: 1rem; font-family: 'Fraunces', serif; }
+.last-run .lr-info small { color: var(--text-muted); font-size: 0.76rem; }
+
+.btn-start-run {
+  background: linear-gradient(135deg, var(--emerald-600), var(--emerald-500), var(--emerald-400));
+  color: var(--navy-900);
+  padding: 20px 26px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  box-shadow: 0 12px 32px -8px rgba(20, 184, 166, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  position: relative;
+  overflow: hidden;
+}
+.btn-start-run::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.2));
+  pointer-events: none;
+}
+.btn-start-run i { font-size: 1.3rem; }
+
+.today-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: rgba(201, 169, 97, 0.1);
+  color: var(--gold-300);
+  padding: 4px 10px; border-radius: 30px;
+  font-size: 0.72rem; font-weight: 700;
+  border: 1px solid rgba(201, 169, 97, 0.2);
+}
+</style>
+</head>
+<body>
+
+<!-- SVG gradients + humanoid clip path -->
+<svg width="0" height="0" style="position:absolute;">
+  <defs>
+    <linearGradient id="premiumGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C9A961"/>
+      <stop offset="50%" stop-color="#14B8A6"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
+    <clipPath id="humanClip">
+      <path d="M50 8 C42 8 35 15 35 23 C35 31 42 38 50 38 C58 38 65 31 65 23 C65 15 58 8 50 8 Z M22 45 C12 45 6 51 6 61 L6 115 C6 121 11 126 17 126 C23 126 28 121 28 115 L28 78 L34 78 L34 178 C34 186 41 192 48 192 C55 192 62 186 62 178 L62 118 L38 118 L38 78 L62 78 L62 118 L62 178 C62 186 69 192 76 192 C83 192 90 186 90 178 L90 78 L96 78 L96 115 C96 121 101 126 107 126 C113 126 118 121 118 115 L118 61 C118 51 112 45 102 45 Z"/>
+    </clipPath>
+  </defs>
+</svg>
+
+<!-- RUNNING MAN TRANSITION -->
+<div class="runner-transition" id="runnerTransition">
+  <div class="runner-stage">
+    <div class="runner-trail" id="runnerTrail"></div>
+    <div class="runner-figure" id="runnerFigure">🏃🏽‍♂️</div>
+  </div>
+  <div class="runner-label" id="runnerLabel">LOADING</div>
+</div>
+
+<header id="appHeader" style="display:none;">
+  <div class="container header-inner">
+    <a class="logo">
+      <div class="logo-mark">🏃</div>
+      Stride
+    </a>
+    <div class="header-user">
+      <span id="headerName" style="color: var(--gold-300); font-weight: 700;"></span>
+      <div class="avatar-mini" id="headerAvatar"></div>
+    </div>
+  </div>
+  <div class="gp-bar"><i class="fas fa-location-dot"></i> GAUTENG · 1,750M ALTITUDE · PREMIUM EDITION</div>
+</header>
+
+<!-- ============ SIGNUP ============ -->
+<div class="screen active" id="screen-signup">
+  <div class="container auth-wrap">
+    <div class="auth-hero">🏃🏽‍♂️</div>
+    <h1>Welcome to Stride</h1>
+    <p>Gauteng's premium running experience. Create your account to begin.</p>
+
+    <div class="card" style="text-align:left; margin-top: 20px;">
+      <label for="usernameInput">Username</label>
+      <input type="text" id="usernameInput" placeholder="e.g. ThaboRuns" maxlength="16" autocomplete="off" autocapitalize="off">
+      <p class="hint">4–16 characters · letters, numbers, underscore</p>
+
+      <label for="passwordInput">Password</label>
+      <input type="password" id="passwordInput" placeholder="At least 4 characters" autocomplete="off">
+      <p class="hint">Stored securely on this device only.</p>
+
+      <label>Choose your running buddy</label>
+      <div class="avatar-grid" id="avatarGrid">
+        <div><div class="avatar-option cheetah" data-avatar="cheetah">🐆</div><div class="avatar-name">Cheetah</div></div>
+        <div><div class="avatar-option sloth" data-avatar="sloth">🦥</div><div class="avatar-name">Sloth</div></div>
+        <div><div class="avatar-option bird" data-avatar="bird">🦅</div><div class="avatar-name">Bird</div></div>
+        <div><div class="avatar-option lion" data-avatar="lion">🦁</div><div class="avatar-name">Lion</div></div>
+        <div><div class="avatar-option tiger" data-avatar="tiger">🐯</div><div class="avatar-name">Tiger</div></div>
+      </div>
+
+      <button class="btn btn-gold" id="signupBtn" style="margin-top: 12px;">
+        <i class="fas fa-arrow-right"></i> Begin your journey
+      </button>
+      <p class="form-msg" id="signupMsg"></p>
+    </div>
+
+    <button class="btn btn-outline" id="showLoginBtn">
+      <i class="fas fa-right-to-bracket"></i> Already have an account
+    </button>
+  </div>
+</div>
+
+<!-- ============ LOGIN ============ -->
+<div class="screen" id="screen-login">
+  <div class="container auth-wrap">
+    <div class="auth-hero">🏃🏽‍♂️</div>
+    <h1>Welcome back</h1>
+    <p>Sign in to continue your journey</p>
+    <div class="card" style="text-align:left; margin-top: 20px;">
+      <label for="loginInput">Username</label>
+      <input type="text" id="loginInput" placeholder="Your username" autocomplete="off" autocapitalize="off">
+      <label for="loginPassInput">Password</label>
+      <input type="password" id="loginPassInput" placeholder="Your password" autocomplete="off">
+      <button class="btn btn-gold" id="loginBtn" style="margin-top: 16px;">
+        <i class="fas fa-right-to-bracket"></i> Sign in
+      </button>
+      <p class="form-msg" id="loginMsg"></p>
+      <button class="btn btn-outline btn-sm" id="showSignupBtn" style="width:100%; margin-top: 14px;">Create new account</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ DASHBOARD ============ -->
+<div class="screen" id="screen-dashboard">
+  <div class="container">
+    <div class="water-banner" id="waterBanner">
+      <i class="fas fa-droplet"></i>
+      <div style="flex:1;">Time to hydrate — altitude accelerates loss.</div>
+      <button class="btn btn-sm btn-sapphire" id="drankBtn">Drank</button>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div style="display:flex; align-items:center;">
+          <div class="icon-wrap"><i class="fas fa-bullseye"></i></div>
+          <h2>Today's Target</h2>
+        </div>
+        <span class="today-badge" id="todayDate"></span>
+      </div>
+      <div class="ring-wrap">
+        <svg width="180" height="180" viewBox="0 0 180 180">
+          <circle class="ring-bg" cx="90" cy="90" r="74"></circle>
+          <circle class="ring-fg" id="progressRing" cx="90" cy="90" r="74" stroke-dasharray="464.9" stroke-dashoffset="464.9"></circle>
+        </svg>
+        <div class="ring-text">
+          <span class="big" id="ringMiles">0</span>
+          <span class="sub" id="ringTarget">of 5 km</span>
+        </div>
+      </div>
+      <button class="btn btn-start-run" id="startRunBtn" style="margin-bottom: 10px;">
+        <i class="fas fa-play"></i> Start Run
+      </button>
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-outline" id="setTargetBtn" style="flex:1;">
+          <i class="fas fa-pen"></i> Target
+        </button>
+        <button class="btn btn-outline" id="logRunBtn" style="flex:1;">
+          <i class="fas fa-check"></i> Log Done
+        </button>
+      </div>
+    </div>
+
+    <div id="lastRunWrap" style="display:none; margin-bottom: 16px;"></div>
+
+    <div class="stat-row">
+      <div class="stat gold"><div class="num" id="statTotalKm">0</div><div class="lbl">KM Total</div></div>
+      <div class="stat emerald"><div class="num" id="statStreak">0</div><div class="lbl">Day Streak</div></div>
+      <div class="stat sapphire"><div class="num" id="statLost">0.0</div><div class="lbl">KG Lost</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div style="display:flex; align-items:center;">
+          <div class="icon-wrap"><i class="fas fa-map-location-dot"></i></div>
+          <h2>Quick Routes</h2>
+        </div>
+        <button class="btn btn-sm btn-outline" id="planRouteBtn" style="padding: 6px 14px; font-size: 0.75rem;">
+          <i class="fas fa-plus"></i> Custom
+        </button>
+      </div>
+      <div id="routeList"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div style="display:flex; align-items:center;">
+          <div class="icon-wrap"><i class="fas fa-medal"></i></div>
+          <h2>Achievements</h2>
+        </div>
+      </div>
+      <div class="badge-grid" id="badgeGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ WATER ============ -->
+<div class="screen" id="screen-water">
+  <div class="container">
+    <h2 style="color: var(--cream); margin-bottom: 16px; display:flex; align-items:center; gap:10px;">
+      <i class="fas fa-droplet" style="color: var(--sapphire-400);"></i> Hydration
+    </h2>
+
+    <div class="card">
+      <div class="water-hero">
+        <div class="humanoid-wrap">
+          <svg class="humanoid" viewBox="0 0 124 200" preserveAspectRatio="none">
+            <path class="humanoid-outline" d="M62 8 C52 8 44 16 44 26 C44 36 52 44 62 44 C72 44 80 36 80 26 C80 16 72 8 62 8 Z M28 52 C16 52 8 59 8 71 L8 137 C8 145 14 151 22 151 C30 151 36 145 36 137 L36 96 L42 96 L42 182 C42 191 50 198 58 198 C66 198 74 191 74 182 L74 130 L50 130 L50 96 L74 96 L74 130 L74 182 C74 191 82 198 90 198 C98 198 106 191 106 182 L106 96 L112 96 L112 137 C112 145 118 151 126 151 C134 151 140 145 140 137 L140 71 C140 59 132 52 120 52 Z"/>
+            <foreignObject x="0" y="0" width="124" height="200" clip-path="url(#humanClip)">
+              <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative; width:100%; height:100%;">
+                <div class="humanoid-fill" id="humanoidFill"></div>
+              </div>
+            </foreignObject>
+          </svg>
+        </div>
+        <div class="water-info">
+          <div class="water-count" id="waterBigCount">0</div>
+          <div class="water-label">of 8 glasses</div>
+          <div class="water-glass-track" id="waterGlassTrack"></div>
+        </div>
+      </div>
+
+      <button class="btn btn-sapphire" id="addWaterBtn" style="margin-top: 20px;">
+        <i class="fas fa-plus"></i> Drink a Glass
+      </button>
+    </div>
+
+    <div class="card">
+      <h3 style="color: var(--cream); margin-bottom: 10px;">
+        <i class="fas fa-lightbulb" style="color: var(--gold-400);"></i> Highveld Hydration
+      </h3>
+      <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);">
+        At 1,750m altitude, you lose fluids roughly <strong style="color: var(--sapphire-300);">20% faster</strong> than at sea level — through breath and dry air.
+        Aim for <strong style="color: var(--sapphire-300);">8 glasses (2 litres)</strong> daily, and add one extra glass for every 30 minutes of running.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ CHALLENGES ============ -->
+<div class="screen" id="screen-challenges">
+  <div class="container">
+    <h2 style="color: var(--cream); margin-bottom: 16px; display:flex; align-items:center; gap:10px;">
+      <i class="fas fa-trophy" style="color: var(--gold-400);"></i> Challenges
+    </h2>
+    <button class="btn btn-gold" id="newChallengeBtn" style="margin-bottom: 16px;">
+      <i class="fas fa-plus"></i> New Challenge
+    </button>
+    <div id="challengesList"></div>
+  </div>
+</div>
+
+<!-- ============ PROFILE ============ -->
+<div class="screen" id="screen-profile">
+  <div class="container">
+    <h2 style="color: var(--cream); margin-bottom: 16px; display:flex; align-items:center; gap:10px;">
+      <i class="fas fa-user" style="color: var(--gold-400);"></i> Profile
+    </h2>
+
+    <div class="card" style="text-align:center;">
+      <div class="avatar-mini" id="profileAvatar" style="width:96px; height:96px; font-size:3.2rem; margin: 0 auto 12px; border-width: 3px;"></div>
+      <h3 id="profileName" style="color: var(--gold-300); font-family:'Fraunces',serif; font-size:1.5rem;"></h3>
+      <p style="margin-top: 6px;">Member since <span id="profileSince"></span></p>
+      <span class="pill gold" style="margin-top: 12px;"><i class="fas fa-crown"></i> Gauteng Member</span>
+    </div>
+
+    <div class="card">
+      <h3 style="color: var(--cream);"><i class="fas fa-weight-scale" style="color: var(--emerald-400);"></i> Weight Tracking</h3>
+      <p style="font-size: 0.84rem; margin-top: 4px;">Enter your weight weekly. We calculate progress from your runs.</p>
+      <label for="weightInput">Current weight (kg)</label>
+      <input type="number" id="weightInput" step="0.1" placeholder="e.g. 72.5">
+      <button class="btn btn-emerald" id="saveWeightBtn" style="margin-top: 12px;">
+        <i class="fas fa-check"></i> Save Weight
+      </button>
+      <div class="stat-row" style="margin-top: 16px;">
+        <div class="stat gold"><div class="num" id="startWeight">—</div><div class="lbl">Start</div></div>
+        <div class="stat emerald"><div class="num" id="currentWeight">—</div><div class="lbl">Current</div></div>
+        <div class="stat sapphire"><div class="num" id="totalLost">—</div><div class="lbl">KG Lost</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="color: var(--cream);"><i class="fas fa-utensils" style="color: var(--gold-400);"></i> Calories Today</h3>
+      <label for="calorieInput">Calories eaten</label>
+      <input type="number" id="calorieInput" placeholder="e.g. 1800">
+      <button class="btn btn-gold" id="saveCaloriesBtn" style="margin-top: 12px;">
+        <i class="fas fa-check"></i> Save
+      </button>
+      <p class="hint">Target: <strong id="calorieTarget" style="color: var(--gold-300);">2000</strong> kcal · ~60 kcal per km</p>
+    </div>
+
+    <div class="card">
+      <h3 style="color: var(--ruby-400);"><i class="fas fa-triangle-exclamation"></i> Emergency & SOS</h3>
+      <label for="contactName">Trusted contact name</label>
+      <input type="text" id="contactName" placeholder="e.g. Mom">
+      <label for="contactPhone">Contact phone</label>
+      <input type="tel" id="contactPhone" placeholder="e.g. 0821234567">
+      <button class="btn btn-gold" id="saveContactBtn" style="margin-top: 12px;">
+        <i class="fas fa-save"></i> Save Contact
+      </button>
+      <div class="divider"></div>
+      <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.7;">
+        <strong style="color: var(--gold-300);">Emergency Numbers (South Africa):</strong><br>
+        🚨 <strong>112</strong> — fastest, any network<br>
+        🚓 <strong>10111</strong> — SAPS<br>
+        🚑 <strong>10177</strong> — Ambulance<br>
+        💚 <strong>0800 428 428</strong> — GBV Command Centre<br>
+        💡 Install <strong>Namola</strong> for GPS-linked SAPS response.
+      </p>
+    </div>
+
+    <button class="btn btn-outline" id="logoutBtn" style="color: var(--ruby-400); border-color: rgba(225, 29, 72, 0.4);">
+      <i class="fas fa-right-from-bracket"></i> Sign Out
+    </button>
+  </div>
+</div>
+
+<nav class="bottom-nav" id="bottomNav" style="display:none;">
+  <button class="nav-item active" data-screen="dashboard"><i class="fas fa-house"></i>Home</button>
+  <button class="nav-item" data-screen="water"><i class="fas fa-droplet"></i>Water</button>
+  <button class="nav-item" data-screen="challenges"><i class="fas fa-trophy"></i>Challenges</button>
+  <button class="nav-item" data-screen="profile"><i class="fas fa-user"></i>Profile</button>
+</nav>
+
+<button class="sos-fab" id="sosFab" style="display:none;">
+  <i class="fas fa-tower-broadcast"></i>SOS
+</button>
+
+<div class="modal-overlay" id="modalOverlay"><div class="modal" id="modalContent"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =============================================================
+   STRIDE PREMIUM — Gauteng Running PWA
+   ============================================================= */
+const STORAGE_KEY = 'stride_premium_v1';
+const SESSION_KEY = 'stride_premium_session_v1';
+const AVATAR_EMOJI = { cheetah:'🐆', sloth:'🦥', bird:'🦅', lion:'🦁', tiger:'🐯' };
+
+const GAUTENG_ROUTES = [
+  { name:'Emmarentia Dam',        area:'Johannesburg',  km:5,   type:'water', icon:'fa-water' },
+  { name:'Zoo Lake',              area:'Rosebank, JHB', km:2.5, type:'water', icon:'fa-water' },
+  { name:'Delta Park',            area:'Victory Park',  km:4,   type:'gold',  icon:'fa-tree' },
+  { name:'Melrose Arch Loop',     area:'Birnam, JHB',   km:3,   type:'gold',  icon:'fa-city' },
+  { name:'Walter Sisulu Garden',  area:'Roodepoort',    km:6,   type:'gold',  icon:'fa-mountain-sun' },
+  { name:'Klipriviersberg',       area:'South JHB',     km:8,   type:'gold',  icon:'fa-mountain' },
+  { name:'Rietvlei Nature Reserve', area:'Pretoria',    km:10,  type:'water', icon:'fa-water' },
+  { name:'Groenkloof Reserve',    area:'Pretoria',      km:7,   type:'gold',  icon:'fa-tree' },
+  { name:'Modderfontein Reserve', area:'Edenvale',      km:6,   type:'water', icon:'fa-water' },
+  { name:'Fountains Valley',      area:'Pretoria',      km:5,   type:'gold',  icon:'fa-tree' }
+];
+
+const $ = id => document.getElementById(id);
+
+function loadUsers(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY))||{}; }catch{ return {}; } }
+function saveUsers(u){ localStorage.setItem(STORAGE_KEY, JSON.stringify(u)); }
+function setSession(k){ localStorage.setItem(SESSION_KEY, k); }
+function getSession(){ return localStorage.getItem(SESSION_KEY); }
+function clearSession(){ localStorage.removeItem(SESSION_KEY); }
+function todayKey(){ return new Date().toISOString().slice(0,10); }
+
+function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); $(id).classList.add('active'); window.scrollTo(0,0); }
+function showToast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2400); }
+function openModal(html){ $('modalContent').innerHTML=html; $('modalOverlay').classList.add('open'); }
+function closeModal(){ $('modalOverlay').classList.remove('open'); }
+window.closeModal = closeModal;
+$('modalOverlay').addEventListener('click', e => { if(e.target.id==='modalOverlay') closeModal(); });
+
+/* ============ RUNNING MAN TRANSITION ============ */
+function playRunnerTransition(label, callback) {
+  const t = $('runnerTransition');
+  const lbl = $('runnerLabel');
+  const figure = $('runnerFigure');
+  const trail = $('runnerTrail');
+
+  lbl.textContent = label || 'LOADING';
+
+  // Reset animations
+  figure.style.animation = 'none';
+  trail.style.animation = 'none';
+  void figure.offsetWidth;
+  void trail.offsetWidth;
+
+  t.classList.add('active');
+  figure.style.animation = 'runAcross 1s cubic-bezier(0.5, 0, 0.5, 1) forwards';
+  trail.style.animation = 'trailAcross 1s cubic-bezier(0.5, 0, 0.5, 1) forwards';
+
+  setTimeout(() => {
+    t.classList.remove('active');
+    if (callback) callback();
+  }, 1000);
+}
+
+/* ============ GOOGLE MAPS ============ */
+function openGoogleMaps(startQuery, endQuery){
+  let url = 'https://www.google.com/maps/dir/?api=1&travelmode=walking';
+  if (startQuery && startQuery.trim()) {
+    url += '&origin=' + encodeURIComponent(startQuery.trim() + ', Gauteng, South Africa');
+  } else {
+    url += '&origin=My+Location';
+  }
+  url += '&destination=' + encodeURIComponent(endQuery.trim() + ', Gauteng, South Africa');
+  window.open(url, '_blank');
+}
+
+let currentUser = null;
+let selectedAvatar = null;
+
+/* ============ SIGNUP ============ */
+document.querySelectorAll('.avatar-option').forEach(opt=>{
+  opt.addEventListener('click', ()=>{
+    document.querySelectorAll('.avatar-option').forEach(o=>o.classList.remove('selected'));
+    opt.classList.add('selected');
+    selectedAvatar = opt.dataset.avatar;
+  });
+});
+
+$('signupBtn').addEventListener('click', ()=>{
+  const name = $('usernameInput').value.trim();
+  const pass = $('passwordInput').value;
+  const msg = $('signupMsg'); msg.className='form-msg';
+
+  if(!/^[a-zA-Z0-9_]{4,16}$/.test(name)){
+    msg.textContent='Username must be 4–16 characters (letters, numbers, _)';
+    msg.classList.add('error'); return;
+  }
+  if(!pass || pass.length < 4){
+    msg.textContent='Password must be at least 4 characters';
+    msg.classList.add('error'); return;
+  }
+  if(!selectedAvatar){
+    msg.textContent='Pick a running buddy first!';
+    msg.classList.add('error'); return;
+  }
+  const users = loadUsers();
+  if(users[name.toLowerCase()]){
+    msg.textContent='That username is taken on this device.';
+    msg.classList.add('error'); return;
+  }
+
+  users[name.toLowerCase()] = {
+    username: name,
+    password: pass,
+    avatar: selectedAvatar,
+    createdAt: Date.now(),
+    targetKm: 5,
+    runs: [],
+    badges: [],
+    weightStart: null,
+    weightCurrent: null,
+    weightHistory: [],
+    caloriesToday: 0,
+    calorieDate: todayKey(),
+    contactName: '',
+    contactPhone: '',
+    challenges: [],
+    waterCount: 0,
+    lastWaterReminder: null,
+    waterDate: todayKey()
+  };
+  saveUsers(users);
+  setSession(name.toLowerCase());
+  playRunnerTransition('WELCOME', () => loginAs(name.toLowerCase()));
+  requestNotificationPermission();
+});
+
+/* ============ LOGIN ============ */
+$('showLoginBtn').addEventListener('click', ()=>{
+  playRunnerTransition('LOGIN', ()=> show('screen-login'));
+});
+$('showSignupBtn').addEventListener('click', ()=>{
+  playRunnerTransition('SIGN UP', ()=> show('screen-signup'));
+});
+
+$('loginBtn').addEventListener('click', ()=>{
+  const name = $('loginInput').value.trim().toLowerCase();
+  const pass = $('loginPassInput').value;
+  const msg = $('loginMsg'); msg.className='form-msg';
+  const users = loadUsers();
+
+  if(!users[name]){
+    msg.textContent='Username not found.';
+    msg.classList.add('error'); return;
+  }
+  if(users[name].password !== pass){
+    msg.textContent='Incorrect password.';
+    msg.classList.add('error'); return;
+  }
+  setSession(name);
+  playRunnerTransition('WELCOME BACK', ()=> loginAs(name));
+});
+
+$('logoutBtn').addEventListener('click', ()=>{
+  clearSession(); currentUser=null;
+  $('appHeader').style.display='none';
+  $('bottomNav').style.display='none';
+  $('sosFab').style.display='none';
+  playRunnerTransition('SIGNING OUT', ()=> show('screen-login'));
+});
+
+function loginAs(key){
+  const users = loadUsers();
+  currentUser = users[key];
+  if(!currentUser) return;
+  if(currentUser.calorieDate !== todayKey()){ currentUser.caloriesToday=0; currentUser.calorieDate=todayKey(); }
+  if(currentUser.waterDate !== todayKey()){ currentUser.waterCount=0; currentUser.waterDate=todayKey(); }
+  saveUsers(users);
+
+  $('appHeader').style.display='block';
+  $('bottomNav').style.display='flex';
+  $('sosFab').style.display='flex';
+  $('headerName').textContent = currentUser.username;
+  $('headerAvatar').textContent = AVATAR_EMOJI[currentUser.avatar];
+
+  renderDashboard();
+  renderRoutes();
+  renderChallenges();
+  renderProfile();
+  renderWater();
+  show('screen-dashboard');
+}
+
+/* ============ NAV with running man ============ */
+document.querySelectorAll('.nav-item').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const s = btn.dataset.screen;
+    const labels = { dashboard:'HOME', water:'HYDRATION', challenges:'CHALLENGES', profile:'PROFILE' };
+    playRunnerTransition(labels[s], () => {
+      document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      show('screen-'+s);
+      if(s==='dashboard'){ renderDashboard(); renderRoutes(); }
+      if(s==='water') renderWater();
+      if(s==='challenges') renderChallenges();
+      if(s==='profile') renderProfile();
+    });
+  });
+});
+
+/* ============ DASHBOARD ============ */
+function renderDashboard(){
+  if(!currentUser) return;
+  const users = loadUsers();
+  const u = users[currentUser.username.toLowerCase()];
+  currentUser = u;
+  const today = todayKey();
+  const todayKm = u.runs.filter(r=>r.date===today).reduce((s,r)=>s+r.km,0);
+  const totalKm = u.runs.reduce((s,r)=>s+r.km,0);
+  const progress = Math.min(todayKm / (u.targetKm||5), 1);
+
+  $('todayDate').textContent = new Date().toLocaleDateString('en-ZA',{weekday:'short',day:'numeric',month:'short'});
+  $('ringMiles').textContent = todayKm.toFixed(1);
+  $('ringTarget').textContent = 'of ' + (u.targetKm||5) + ' km';
+  const circ = 2*Math.PI*74;
+  $('progressRing').setAttribute('stroke-dashoffset', circ*(1-progress));
+
+  $('statTotalKm').textContent = totalKm.toFixed(1);
+  $('statStreak').textContent = calculateStreak(u.runs);
+  const lost = (u.weightStart && u.weightCurrent) ? (u.weightStart-u.weightCurrent) : 0;
+  $('statLost').textContent = lost.toFixed(1);
+
+  const lrWrap = $('lastRunWrap');
+  if (u.runs.length) {
+    const last = u.runs[u.runs.length-1];
+    const diff = (Date.now() - last.at) / 1000;
+    let ago = '';
+    if (diff < 3600) ago = Math.floor(diff/60) + ' min ago';
+    else if (diff < 86400) ago = Math.floor(diff/3600) + ' hr ago';
+    else ago = Math.floor(diff/86400) + ' days ago';
+    lrWrap.style.display = 'block';
+    lrWrap.innerHTML = `
+      <div class="last-run">
+        <div class="lr-icon">🏁</div>
+        <div class="lr-info">
+          <strong>${last.km.toFixed(1)} km ${last.min?('· '+last.min+' min'):''}</strong>
+          <small>Last run · ${ago}</small>
+        </div>
+      </div>`;
+  } else {
+    lrWrap.style.display = 'none';
+  }
+
+  renderBadges(u, totalKm, todayKm);
+  renderWaterReminder(u);
+}
+
+function calculateStreak(runs){
+  if(!runs.length) return 0;
+  const days = new Set(runs.map(r=>r.date));
+  let streak=0; let d=new Date();
+  while(true){
+    const k = d.toISOString().slice(0,10);
+    if(days.has(k)){ streak++; d.setDate(d.getDate()-1); } else break;
+    if(streak>365) break;
+  }
+  return streak;
+}
+
+/* ============ BADGES ============ */
+const BADGE_DEFS = [
+  { id:'first_run',  label:'First Step',    icon:'👟', cls:'',         check:(u,t)=>t>=1 },
+  { id:'five_km',    label:'5K Hero',       icon:'🥉', cls:'sapphire', check:(u,t)=>t>=5 },
+  { id:'ten_km',     label:'10K Strong',    icon:'🥈', cls:'sapphire', check:(u,t)=>t>=10 },
+  { id:'half_mar',   label:'Half Marathon', icon:'🥇', cls:'emerald',  check:(u,t)=>t>=21.1 },
+  { id:'marathon',   label:'Marathon',      icon:'🏆', cls:'emerald',  check:(u,t)=>t>=42.2 },
+  { id:'streak_3',   label:'3-Day Streak',  icon:'🔥', cls:'',         check:(u)=>calculateStreak(u.runs)>=3 },
+  { id:'streak_7',   label:'Week Warrior',  icon:'⚡', cls:'',         check:(u)=>calculateStreak(u.runs)>=7 },
+  { id:'target_hit', label:'Target Hit',    icon:'🎯', cls:'sapphire', check:(u,t,k)=>k>=(u.targetKm||5) },
+  { id:'water_hero', label:'Hydrated',      icon:'💧', cls:'sapphire', check:(u)=>(u.waterCount||0)>=8 }
+];
+
+function renderBadges(u, totalKm, todayKm){
+  const grid = $('badgeGrid'); grid.innerHTML='';
+  BADGE_DEFS.forEach(def=>{
+    const earned = def.check(u, totalKm, todayKm);
+    if(earned && !u.badges.includes(def.id)){
+      u.badges.push(def.id);
+      const users = loadUsers();
+      users[u.username.toLowerCase()] = u;
+      saveUsers(users);
+      showToast('🏆 Achievement: ' + def.label);
+    }
+    const div = document.createElement('div');
+    div.className = 'badge ' + (earned ? 'earned ' + (def.cls||'') : 'locked');
+    div.innerHTML = `<div>${def.icon}</div><div class="badge-label">${def.label}</div>`;
+    grid.appendChild(div);
+  });
+}
+
+/* ============ WATER RENDER ============ */
+function renderWater(){
+  if(!currentUser) return;
+  const users = loadUsers();
+  const u = users[currentUser.username.toLowerCase()];
+  currentUser = u;
+
+  const count = u.waterCount || 0;
+  const pct = Math.min(count / 8, 1) * 100;
+
+  const fill = $('humanoidFill');
+  if (fill) fill.style.height = pct + '%';
+
+  const bigCount = $('waterBigCount');
+  if (bigCount) bigCount.textContent = count;
+
+  const track = $('waterGlassTrack');
+  if (track){
+    track.innerHTML = '';
+    for (let i = 0; i < 8; i++){
+      const g = document.createElement('div');
+      g.className = 'water-glass' + (i < count ? ' full' : '');
+      track.appendChild(g);
+    }
+  }
+}
+
+$('addWaterBtn').addEventListener('click', ()=>{
+  const users = loadUsers();
+  const u = users[currentUser.username.toLowerCase()];
+  if ((u.waterCount || 0) >= 8) {
+    showToast('💧 Already fully hydrated today!');
+    return;
+  }
+  u.waterCount = (u.waterCount || 0) + 1;
+  u.lastWaterReminder = Date.now();
+  users[u.username.toLowerCase()] = u;
+  saveUsers(users);
+  currentUser = u;
+  renderWater();
+  renderDashboard();
+  showToast('💧 Glass ' + u.waterCount + ' of 8 logged');
+  if (u.waterCount === 8) showToast('🎉 Fully hydrated! Achievement unlocked');
+});
+
+/* ============ WATER BANNER ============ */
+function renderWaterReminder(u){
+  const banner = $('waterBanner');
+  const last = u.lastWaterReminder || 0;
+  if(Date.now() - last > 45*60*1000 && (u.waterCount||0) < 8) banner.style.display='flex';
+  else banner.style.display='none';
+}
+$('drankBtn').addEventListener('click', ()=>{
+  const users = loadUsers();
+  const u = users[currentUser.username.toLowerCase()];
+  u.waterCount = (u.waterCount||0) + 1;
+  u.lastWaterReminder = Date.now();
+  users[u.username.toLowerCase()] = u;
+  saveUsers(users);
+  currentUser = u;
+  $('waterBanner').style.display='none';
+  showToast('💧 ' + u.waterCount + ' glasses today');
+  renderDashboard(); renderWater(); renderProfile();
+});
+setInterval(()=>{ if(currentUser) renderWaterReminder(currentUser); }, 60000);
+
+/* ============ ROUTES ============ */
+function renderRoutes(){
+  const list = $('routeList'); if(!list) return;
+  list.innerHTML = '';
+  GAUTENG_ROUTES.forEach(r=>{
+    const div = document.createElement('div');
+    div.className = 'route-item ' + (r.type==='water'?'water':r.type==='gold'?'gold':'');
+    div.innerHTML = `
+      <i class="fas ${r.icon} route-icon"></i>
+      <div class="route-info">
+        <strong>${r.name}</strong>
+        <small>${r.area} · ~${r.km} km</small>
+      </div>
+      <i class="fas fa-diamond-turn-right route-arrow"></i>
+    `;
+    div.addEventListener('click', ()=>{
+      openGoogleMaps('', r.name);
+      showToast('Opening Google Maps…');
+    });
+    list.appendChild(div);
+  });
+}
+
+/* ============ START RUN ============ */
+$('startRunBtn').addEventListener('click', ()=>{
+  openModal(`
+    <h2><i class="fas fa-play" style="color: var(--emerald-400);"></i> Start your run</h2>
+    <p style="margin-top: 6px;">Where are you running today?</p>
+    <div style="margin-top: 16px;">
+      <button class="btn btn-emerald" id="usePresetBtn"><i class="fas fa-map-location-dot"></i> Pick a Gauteng route</button>
+      <button class="btn btn-outline" id="customRouteBtn" style="margin-top: 10px;"><i class="fas fa-route"></i> Plan my own route</button>
+      <button class="btn btn-outline" id="justStartBtn" style="margin-top: 10px;"><i class="fas fa-location-crosshairs"></i> Just go from here</button>
+    </div>
+    <p class="hint" style="margin-top: 14px;">Google Maps opens with walking directions.</p>
+    <div class="modal-actions"><button class="btn btn-outline" onclick="closeModal()">Cancel</button></div>
+  `);
+  $('usePresetBtn').addEventListener('click', ()=>{ closeModal(); openPresetPicker(); });
+  $('customRouteBtn').addEventListener('click', ()=>{ closeModal(); openCustomRoute(); });
+  $('justStartBtn').addEventListener('click', ()=>{
+    closeModal();
+    window.open('https://www.google.com/maps/@?api=1&map_action=map&center=My+Location', '_blank');
+    showToast('Opening Maps from your location…');
+  });
+});
+
+function openPresetPicker(){
+  const items = GAUTENG_ROUTES.map((r, i) => `
+    <div class="route-item ${r.type==='water'?'water':r.type==='gold'?'gold':''}" data-idx="${i}">
+      <i class="fas ${r.icon} route-icon"></i>
+      <div class="route-info"><strong>${r.name}</strong><small>${r.area} · ~${r.km} km</small></div>
+      <i class="fas fa-diamond-turn-right route-arrow"></i>
+    </div>
+  `).join('');
+  openModal(`
+    <h2>Pick a route</h2>
+    <div style="margin-top: 14px;">${items}</div>
+    <div class="modal-actions"><button class="btn btn-outline" onclick="closeModal()">Back</button></div>
+  `);
+  document.querySelectorAll('#modalContent .route-item').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const r = GAUTENG_ROUTES[parseInt(el.dataset.idx)];
+      closeModal();
+      openGoogleMaps('', r.name);
+      showToast('Opening ' + r.name + '…');
+    });
+  });
+}
+
+function openCustomRoute(){
+  openModal(`
+    <h2><i class="fas fa-route" style="color: var(--emerald-400);"></i> Plan your route</h2>
+    <label for="startInput">Starting point</label>
+    <input type="text" id="startInput" placeholder="e.g. Sandton City" autofocus>
+    <label for="endInput">Destination</label>
+    <input type="text" id="endInput" placeholder="e.g. Delta Park">
+    <p class="hint" style="margin-top: 10px;">Leave start empty to run from where you are.</p>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-emerald" id="goCustomRouteBtn"><i class="fas fa-play"></i> Go</button>
+    </div>
+  `);
+  $('goCustomRouteBtn').addEventListener('click', ()=>{
+    const start = $('startInput').value.trim();
+    const end = $('endInput').value.trim();
+    if(!end){ showToast('Enter a destination'); return; }
+    closeModal();
+    openGoogleMaps(start, end);
+    showToast('Opening directions…');
+  });
+}
+
+$('planRouteBtn').addEventListener('click', ()=>openCustomRoute());
+
+/* ============ LOG RUN ============ */
+$('logRunBtn').addEventListener('click', ()=>{
+  openModal(`
+    <h2>Log your run</h2>
+    <label for="runKm">Distance (km)</label>
+    <input type="number" id="runKm" step="0.1" placeholder="e.g. 5.2" autofocus>
+    <label for="runMin">Duration (min) — optional</label>
+    <input type="number" id="runMin" placeholder="e.g. 32">
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-gold" id="confirmRunBtn">Log it</button>
+    </div>
+  `);
+  $('confirmRunBtn').addEventListener('click', ()=>{
+    const km = parseFloat($('runKm').value);
+    const min = parseFloat($('runMin').value)||0;
+    if(!km || km<=0 || km>100){ showToast('Enter a valid distance'); return; }
+    const users = loadUsers();
+    const u = users[currentUser.username.toLowerCase()];
+    u.runs.push({ date:todayKey(), km, min, at:Date.now() });
+    users[u.username.toLowerCase()] = u;
+    saveUsers(users); currentUser = u;
+    closeModal(); renderDashboard();
+    showToast('✅ ' + km.toFixed(1) + ' km logged');
+  });
+});
+
+/* ============ SET TARGET ============ */
+$('setTargetBtn').addEventListener('click', ()=>{
+  openModal(`
+    <h2>Daily target</h2>
+    <label for="targetInput">Target (km)</label>
+    <input type="number" id="targetInput" step="0.5" value="${currentUser.targetKm||5}" autofocus>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-gold" id="saveTargetBtn">Save</button>
+    </div>
+  `);
+  $('saveTargetBtn').addEventListener('click', ()=>{
+    const t = parseFloat($('targetInput').value);
+    if(!t || t<=0){ showToast('Enter a valid number'); return; }
+    const users = loadUsers();
+    const u = users[currentUser.username.toLowerCase()];
+    u.targetKm = t; users[u.username.toLowerCase()]=u;
+    saveUsers(users); currentUser=u;
+    closeModal(); renderDashboard();
+    showToast('🎯 Target: ' + t + ' km/day');
+  });
+});
+
+/* ============ CHALLENGES ============ */
+$('newChallengeBtn').addEventListener('click', ()=>{
+  openModal(`
+    <h2>New challenge</h2>
+    <p style="margin-bottom: 12px;">Challenge a friend on this device. 7 days, first to km target.</p>
+    <label for="chFriend">Friend's username</label>
+    <input type="text" id="chFriend" placeholder="e.g. LeratoRuns" autofocus autocapitalize="off">
+    <label for="chKm">Target distance (km)</label>
+    <input type="number" id="chKm" step="0.5" value="20">
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-gold" id="createChBtn">Start</button>
+    </div>
+  `);
+  $('createChBtn').addEventListener('click', ()=>{
+    const friend = $('chFriend').value.trim().toLowerCase();
+    const km = parseFloat($('chKm').value);
+    if(!friend || !km || km<=0){ showToast('Fill both fields'); return; }
+    if(friend === currentUser.username.toLowerCase()){ showToast("Can't challenge yourself!"); return; }
+    const users = loadUsers();
+    if(!users[friend]){ showToast('Friend not found on this device'); return; }
+    const u = users[currentUser.username.toLowerCase()];
+    u.challenges.push({
+      friendKey:friend, friendName:users[friend].username,
+      targetKm:km, startAt:Date.now(), endAt:Date.now()+7*24*60*60*1000,
+      friendKmAtStart: users[friend].runs.reduce((s,r)=>s+r.km,0),
+      myKmAtStart: u.runs.reduce((s,r)=>s+r.km,0)
+    });
+    users[u.username.toLowerCase()]=u; saveUsers(users); currentUser=u;
+    closeModal(); renderChallenges();
+    showToast('🏁 Challenge started');
+  });
+});
+
+function renderChallenges(){
+  if(!currentUser) return;
+  const users = loadUsers();
+  const u = users[currentUser.username.toLowerCase()]; currentUser = u;
+  const list = $('challengesList'); if(!list) return;
+  list.innerHTML = '';
+  if(!u.challenges.length){
+    list.innerHTML = '<div class="empty"><i class="fas fa-trophy"></i>No challenges yet. Start one!</div>';
+    return;
+  }
+  u.challenges.forEach(ch=>{
+    const me = u.runs.reduce((s,r)=>s+r.km,0) - ch.myKmAtStart;
+    const fu = users[ch.friendKey];
+    const friendKm = fu ? fu.runs.reduce((s,r)=>s+r.km,0) - ch.friendKmAtStart : 0;
+    const myPct = Math.min(me/ch.targetKm,1)*100;
+    const frPct = Math.min(friendKm/ch.targetKm,1)*100;
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.innerHTML = `
+      <div class="card-header">
+        <h3>vs ${ch.friendName}</h3>
+        <span style="font-size: 0.74rem; color: var(--gold-300); font-weight: 700;">${ch.targetKm} km · 7 days</span>
+      </div>
+      <div class="challenge">
+        <span class="challenge-avatar">${AVATAR_EMOJI[u.avatar]}</span>
+        <div class="challenge-info">
+          <strong>${u.username} — ${me.toFixed(1)} km</strong>
+          <div class="challenge-bar"><div style="width:${myPct}%"></div></div>
+        </div>
+      </div>
+      <div class="challenge">
+        <span class="challenge-avatar">${fu?AVATAR_EMOJI[fu.avatar]:'👤'}</span>
+        <div class="challenge-info">
+          <strong>${ch.friendName} — ${friendKm.toFixed(1)} km</strong>
+          <div class="challenge-bar"><div style="width:${frPct}%"></div></div>
+        </div>
+      </div>
+    `;
+    list.appendChild(div);
+  });
+}
+
+/* ============ PROFILE ============ */
+function renderProfile(){
+  if(!currentUser) return;
+  const users = loadUsers();
+  const u = users[currentUser.username.toLowerCase()]; currentUser = u;
+
+  $('profileAvatar').textContent = AVATAR_EMOJI[u.avatar];
+  $('profileName').textContent = u.username;
+  $('profileSince').textContent = new Date(u.createdAt).toLocaleDateString('en-ZA',{month:'long',year:'numeric'});
+  $('startWeight').textContent = u.weightStart?u.weightStart.toFixed(1):'—';
+  $('currentWeight').textContent = u.weightCurrent?u.weightCurrent.toFixed(1):'—';
+  const lost = (u.weightStart && u.weightCurrent) ? (u.weightStart-u.weightCurrent) : 0;
+  $('totalLost').textContent = lost ? lost.toFixed(1) : '—';
+  $('contactName').value = u.contactName||'';
+  $('contactPhone').value = u.contactPhone||'';
+  $('calorieInput').value = u.caloriesToday||'';
+}
+
+$('saveWeightBtn').addEventListener('click', ()=>{
+  const w = parseFloat($('weightInput').value);
+  if(!w || w<20 || w>300){ showToast('Enter valid weight (kg)'); return; }
+  const users = loadUsers();
+  const u = users[currentUser.username.toLowerCase()];
+  if(!u.weightStart) u.weightStart = w;
+  u.weightCurrent = w;
+  u.weightHistory.push({ date:todayKey(), kg:w });
+  users[u.username.toLowerCase()]=u; saveUsers(users); currentUser=u;
+  $('weightInput').value='';
+  renderProfile(); renderDashboard();
+  showToast('⚖️ Weight saved');
+});
+
+$('saveCaloriesBtn').addEventListener('click', ()=>{
+  const c = parseFloat($('calorieInput').value);
+  if(!c || c<0 || c>10000){ showToast('Enter valid calories'); return; }
+  const users = loadUsers();
+  const u = users[currentUser.username.toLowerCase()];
+  u.caloriesToday = c; u.calorieDate = todayKey();
+  users[u.username.toLowerCase()]=u; saveUsers(users); currentUser=u;
+  showToast('🍽️ Calories saved');
+});
+
+$('saveContactBtn').addEventListener('click', ()=>{
+  const name = $('contactName').value.trim();
+  const phone = $('contactPhone').value.trim();
+  const users = loadUsers();
+  const u = users[currentUser.username.toLowerCase()];
+  u.contactName = name; u.contactPhone = phone;
+  users[u.username.toLowerCase()]=u; saveUsers(users); currentUser=u;
+  showToast('✅ Contact saved');
+});
+
+/* ============ SOS ============ */
+$('sosFab').addEventListener('click', ()=>{
+  const u = currentUser;
+  const contact = u.contactName && u.contactPhone
+    ? `<p style="margin-top:8px; padding:12px; background: rgba(20,184,166,0.1); border: 1px solid rgba(20,184,166,0.25); border-radius:12px; color: var(--emerald-300);"><strong>${u.contactName}:</strong> ${u.contactPhone}</p>`
+    : '<p style="margin-top:8px; color: var(--text-muted);">No trusted contact set.</p>';
+  openModal(`
+    <h2 style="color: var(--ruby-400);"><i class="fas fa-triangle-exclamation"></i> Emergency SOS</h2>
+    <p style="margin-top: 6px;">Choose who to dial.</p>
+    ${contact}
+    <div style="display:flex; flex-direction:column; gap:10px; margin-top: 18px;">
+      <button class="btn btn-danger" onclick="dial('112')"><i class="fas fa-phone"></i> 112 — Fastest</button>
+      <button class="btn btn-danger" onclick="dial('10111')"><i class="fas fa-phone"></i> 10111 — SAPS</button>
+      ${u.contactPhone ? `<button class="btn btn-emerald" onclick="dial('${u.contactPhone.replace(/'/g,'')}')"><i class="fas fa-phone"></i> Call ${u.contactName || 'contact'}</button>` : ''}
+    </div>
+    <div class="modal-actions"><button class="btn btn-outline" onclick="closeModal()">Cancel</button></div>
+  `);
+});
+function dial(n){ window.location.href = 'tel:' + n; }
+window.dial = dial;
+
+/* ============ NOTIFICATIONS ============ */
+function requestNotificationPermission(){
+  if('Notification' in window && Notification.permission === 'default'){
+    Notification.requestPermission();
+  }
+}
+
+/* ============ SERVICE WORKER ============ */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+
+/* ============ BOOT ============ */
+(function init(){
+  const s = getSession();
+  const users = loadUsers();
+  if(s && users[s]) loginAs(s);
+  else show('screen-signup');
+})();
+</script>
+</body>
+  </html>
