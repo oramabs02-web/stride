@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1e6091">
+<meta name="description" content="Stride — Gauteng's running app. Set targets, plan routes, log runs, stay safe.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Stride">
+<title>Stride • Gauteng Runners</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231e6091'/%3E%3Ctext x='50' y='68' font-size='58' text-anchor='middle'%3E%F0%9F%8F%83%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+:root {
+  --blue-deep: #12455f;
+  --blue: #1e6091;
+  --blue-mid: #2a7fb8;
+  --blue-light: #7fc4e8;
+  --blue-pale: #d6ecf7;
+  --green-deep: #1b4332;
+  --green: #2d6a4f;
+  --green-mid: #40916c;
+  --green-light: #74c69d;
+  --green-pale: #d8f3dc;
+  --peach-deep: #e76f51;
+  --peach: #f4845f;
+  --peach-mid: #ffa07a;
+  --peach-light: #ffd9c4;
+  --peach-pale: #fff0e6;
+  --cream: #fbf8f3;
+  --text: #16241f;
+  --gray: #6b7c75;
+  --danger: #c1121f;
+  --danger-light: #ffd6d6;
+  --radius: 22px;
+  --radius-sm: 14px;
+  --shadow: 0 8px 28px -10px rgba(18, 69, 95, 0.22);
+  --shadow-blue: 0 8px 22px -8px rgba(30, 96, 145, 0.35);
+  --shadow-peach: 0 8px 22px -8px rgba(244, 132, 95, 0.4);
+  --shadow-green: 0 8px 22px -8px rgba(45, 106, 79, 0.4);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { overscroll-behavior: none; }
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  line-height: 1.5;
+  padding-bottom: 96px;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+.container { max-width: 520px; margin: 0 auto; padding: 0 18px; }
+h1, h2, h3 { font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; }
+h1 { font-size: 1.8rem; }
+h2 { font-size: 1.35rem; margin-bottom: 6px; }
+h3 { font-size: 1.1rem; }
+p { color: var(--gray); }
+button, input, select, textarea { font-family: inherit; }
+button { cursor: pointer; border: none; }
+
+header {
+  background: linear-gradient(135deg, var(--blue-deep), var(--blue));
+  color: white;
+  padding: 12px 0;
+  position: sticky; top: 0; z-index: 50;
+  box-shadow: 0 2px 14px rgba(18,69,95,0.2);
+}
+.header-inner { display: flex; align-items: center; justify-content: space-between; }
+.logo { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.22rem; color: white; text-decoration: none; }
+.logo i { color: var(--peach-light); font-size: 1.35rem; }
+.header-user { display: flex; align-items: center; gap: 8px; font-size: 0.88rem; }
+.avatar-mini {
+  width: 34px; height: 34px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; border: 2px solid var(--peach-light);
+  background: white;
+}
+.gp-bar {
+  background: var(--green-pale);
+  color: var(--green-deep);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 6px 0;
+  text-align: center;
+  border-bottom: 1px solid #c7e7d1;
+}
+.gp-bar i { color: var(--green); margin-right: 4px; }
+
+.screen { display: none; padding: 20px 0; }
+.screen.active { display: block; animation: fadeIn 0.25s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.auth-wrap { padding: 30px 0 20px; text-align: center; }
+.auth-wrap h1 { color: var(--blue-deep); margin-bottom: 6px; }
+.auth-wrap > p { margin-bottom: 20px; }
+.auth-hero {
+  font-size: 3.4rem; margin-bottom: 12px;
+  background: linear-gradient(135deg, var(--blue), var(--green), var(--peach));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.avatar-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 18px 0; }
+.avatar-option {
+  aspect-ratio: 1; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.9rem; border: 3px solid transparent;
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+.avatar-option.selected { border-color: var(--blue); transform: scale(1.1); box-shadow: 0 6px 16px rgba(30,96,145,0.35); }
+.avatar-option.cheetah { background: #ffd9a8; }
+.avatar-option.sloth   { background: #d9c3a5; }
+.avatar-option.bird    { background: var(--blue-light); }
+.avatar-option.lion    { background: #ffd97d; }
+.avatar-option.tiger   { background: var(--peach-mid); }
+.avatar-name { font-size: 0.68rem; text-align: center; margin-top: 4px; color: var(--gray); font-weight: 700; }
+
+input, select, textarea {
+  width: 100%; padding: 14px 18px; border-radius: 60px;
+  border: 2px solid #e2e8e2; font-size: 1rem;
+  background: white; outline: none;
+  color: var(--text);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--blue-mid); box-shadow: 0 0 0 4px var(--blue-pale); }
+label { display: block; text-align: left; font-size: 0.84rem; font-weight: 700; color: var(--blue-deep); margin: 14px 0 6px; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 15px 26px; border-radius: 60px; font-weight: 700;
+  font-size: 1rem; transition: transform 0.15s, opacity 0.15s; width: 100%;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--blue); color: white; box-shadow: var(--shadow-blue); }
+.btn-green { background: var(--green); color: white; box-shadow: var(--shadow-green); }
+.btn-peach { background: var(--peach); color: white; box-shadow: var(--shadow-peach); }
+.btn-outline { background: white; color: var(--blue-deep); border: 2px solid #e2e8e2; }
+.btn-danger { background: var(--danger); color: white; }
+.btn-sm { padding: 10px 18px; font-size: 0.9rem; width: auto; }
+.btn-lg { padding: 18px 26px; font-size: 1.1rem; }
+
+/* BIG START BUTTON */
+.btn-start {
+  background: linear-gradient(135deg, var(--green), var(--green-mid));
+  color: white;
+  padding: 20px 26px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  box-shadow: 0 10px 28px -8px rgba(45,106,79,0.5);
+  position: relative;
+  overflow: hidden;
+}
+.btn-start::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.15));
+  pointer-events: none;
+}
+.btn-start:active { transform: scale(0.98); }
+.btn-start i { font-size: 1.3rem; }
+.btn-start.blue { background: linear-gradient(135deg, var(--blue), var(--blue-mid)); box-shadow: 0 10px 28px -8px rgba(30,96,145,0.5); }
+.btn-start.peach { background: linear-gradient(135deg, var(--peach), var(--peach-deep)); box-shadow: 0 10px 28px -8px rgba(244,132,95,0.5); }
+
+.form-msg { margin-top: 12px; font-weight: 600; min-height: 20px; font-size: 0.9rem; text-align: center; }
+.error { color: var(--danger); }
+.success { color: var(--green); }
+
+.card {
+  background: white; border-radius: var(--radius);
+  padding: 20px; box-shadow: var(--shadow);
+  margin-bottom: 14px;
+  border: 1px solid rgba(30,96,145,0.06);
+}
+.card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; gap: 8px; }
+.card-header h2, .card-header h3 { color: var(--blue-deep); }
+.card-header i { color: var(--blue); margin-right: 8px; }
+
+.ring-wrap { position: relative; width: 170px; height: 170px; margin: 8px auto 18px; }
+.ring-wrap svg { transform: rotate(-90deg); }
+.ring-bg { fill: none; stroke: #eef3f5; stroke-width: 13; }
+.ring-fg { fill: none; stroke: url(#ringGradient); stroke-width: 13; stroke-linecap: round; transition: stroke-dashoffset 0.6s ease; }
+.ring-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.ring-text .big { font-size: 2.1rem; font-weight: 800; color: var(--blue-deep); line-height: 1; }
+.ring-text .sub { font-size: 0.8rem; color: var(--gray); margin-top: 4px; font-weight: 600; }
+
+.stat-row { display: flex; gap: 10px; margin-bottom: 12px; }
+.stat { flex: 1; background: var(--blue-pale); border-radius: var(--radius-sm); padding: 12px 6px; text-align: center; border: 1px solid rgba(30,96,145,0.1); }
+.stat.green { background: var(--green-pale); border-color: rgba(45,106,79,0.12); }
+.stat.peach { background: var(--peach-pale); border-color: rgba(244,132,95,0.18); }
+.stat .num { font-size: 1.3rem; font-weight: 800; color: var(--blue-deep); line-height: 1.1; }
+.stat.green .num { color: var(--green-deep); }
+.stat.peach .num { color: var(--peach-deep); }
+.stat .lbl { font-size: 0.68rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; font-weight: 700; }
+
+.badge-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.badge { aspect-ratio: 1; border-radius: 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 6px; font-size: 1.8rem; background: #f4f7f5; border: 2px solid #e2ebe5; }
+.badge.earned { background: linear-gradient(135deg, var(--peach-light), var(--peach-pale)); border-color: var(--peach); }
+.badge.earned.blue { background: linear-gradient(135deg, var(--blue-pale), #eaf5fb); border-color: var(--blue-mid); }
+.badge.earned.green { background: linear-gradient(135deg, var(--green-pale), #ecf8f0); border-color: var(--green-mid); }
+.badge.locked { opacity: 0.35; }
+.badge .badge-label { font-size: 0.6rem; font-weight: 800; color: var(--blue-deep); margin-top: 3px; line-height: 1.1; }
+
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: white; display: flex;
+  border-top: 1px solid #e8eef0;
+  box-shadow: 0 -4px 22px rgba(18,69,95,0.1);
+  z-index: 60;
+  padding: 6px 0 max(6px, env(safe-area-inset-bottom));
+}
+.nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 4px; background: none; color: var(--gray); font-size: 0.68rem; font-weight: 700; }
+.nav-item i { font-size: 1.25rem; }
+.nav-item.active { color: var(--blue); }
+.nav-item.active i { color: var(--blue); }
+
+.sos-fab {
+  position: fixed; bottom: 104px; right: 16px;
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--danger); color: white;
+  font-size: 0.82rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 26px rgba(193,18,31,0.5);
+  z-index: 55; flex-direction: column; line-height: 1;
+  animation: pulse 2.2s infinite;
+}
+.sos-fab i { font-size: 1.15rem; margin-bottom: 2px; }
+@keyframes pulse { 0%, 100% { box-shadow: 0 8px 26px rgba(193,18,31,0.5); } 50% { box-shadow: 0 8px 32px rgba(193,18,31,0.95); } }
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(18,69,95,0.55); z-index: 100; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(3px); }
+.modal-overlay.open { display: flex; }
+.modal { background: white; border-radius: var(--radius); padding: 24px 22px; width: 100%; max-width: 420px; max-height: 88vh; overflow-y: auto; animation: pop 0.22s ease; }
+@keyframes pop { from { transform: scale(0.94); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal h2 { color: var(--blue-deep); }
+.modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+.modal-actions .btn { flex: 1; }
+
+/* ROUTE ITEM */
+.route-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 12px; background: var(--green-pale);
+  border-radius: var(--radius-sm); margin-bottom: 8px;
+  cursor: pointer; transition: transform 0.15s;
+  border-left: 4px solid var(--green);
+}
+.route-item:active { transform: scale(0.99); }
+.route-item.water { background: var(--blue-pale); border-left-color: var(--blue); }
+.route-item.peach { background: var(--peach-pale); border-left-color: var(--peach); }
+.route-item i.route-icon { color: var(--green); font-size: 1.3rem; width: 24px; }
+.route-item.water i.route-icon { color: var(--blue); }
+.route-item.peach i.route-icon { color: var(--peach); }
+.route-info { flex: 1; }
+.route-info strong { display: block; color: var(--blue-deep); font-size: 0.95rem; }
+.route-info small { color: var(--gray); font-size: 0.75rem; }
+.route-arrow { color: var(--gray); font-size: 0.9rem; }
+
+.water-banner {
+  background: linear-gradient(135deg, var(--blue-light), var(--blue-pale));
+  color: var(--blue-deep); border-radius: var(--radius-sm);
+  padding: 14px 16px; display: flex; align-items: center;
+  gap: 12px; margin-bottom: 14px; font-weight: 700; font-size: 0.9rem;
+  border: 1px solid rgba(30,96,145,0.15);
+}
+.water-banner i { font-size: 1.5rem; color: var(--blue); }
+.water-banner button { margin-left: auto; flex-shrink: 0; }
+.water-track { display: flex; gap: 5px; margin-top: 8px; }
+.water-glass { flex: 1; height: 22px; border-radius: 4px; background: #e8eef1; border: 1px solid #d4dfe4; }
+.water-glass.full { background: linear-gradient(180deg, var(--blue-light), var(--blue-mid)); border-color: var(--blue); }
+
+.challenge { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--blue-pale); border-radius: var(--radius-sm); margin-bottom: 10px; }
+.challenge.peach { background: var(--peach-pale); }
+.challenge-avatar { font-size: 1.8rem; }
+.challenge-info { flex: 1; }
+.challenge-info strong { display: block; color: var(--blue-deep); font-size: 0.92rem; }
+.challenge-info small { color: var(--gray); font-size: 0.75rem; }
+.challenge-bar { height: 6px; background: #d9e5ec; border-radius: 6px; margin-top: 6px; overflow: hidden; }
+.challenge-bar div { height: 100%; background: linear-gradient(90deg, var(--blue-mid), var(--green-mid)); border-radius: 6px; transition: width 0.4s; }
+
+.empty { text-align: center; padding: 30px 12px; color: var(--gray); }
+.empty i { font-size: 2.4rem; color: var(--peach); margin-bottom: 12px; display: block; }
+
+.toast {
+  position: fixed; bottom: 112px; left: 50%; transform: translateX(-50%) translateY(30px);
+  background: var(--blue-deep); color: white;
+  padding: 12px 22px; border-radius: 60px; font-size: 0.9rem; font-weight: 700;
+  box-shadow: var(--shadow); opacity: 0; pointer-events: none;
+  transition: all 0.3s; z-index: 200; max-width: 90vw; text-align: center;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.hint { font-size: 0.78rem; color: var(--gray); margin-top: 8px; }
+.divider { height: 1px; background: #e8eef0; margin: 16px 0; }
+.pill { display: inline-block; padding: 3px 10px; border-radius: 30px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; }
+.pill.water { background: var(--blue-pale); color: var(--blue-deep); }
+.pill.green { background: var(--green-pale); color: var(--green-deep); }
+.pill.peach { background: var(--peach-pale); color: var(--peach-deep); }
+
+/* LAST RUN SUMMARY */
+.last-run {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px; background: var(--peach-pale);
+  border-radius: var(--radius-sm);
+  border-left: 4px solid var(--peach);
+}
+.last-run .lr-icon { font-size: 1.8rem; }
+.last-run .lr-info { flex: 1; }
+.last-run .lr-info strong { display: block; color: var(--peach-deep); font-size: 1rem; }
+.last-run .lr-info small { color: var(--gray); font-size: 0.78rem; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute;">
+  <defs>
+    <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e6091"/>
+      <stop offset="50%" stop-color="#2d6a4f"/>
+      <stop offset="100%" stop-color="#f4845f"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<header id="appHeader" style="display:none;">
+  <div class="container header-inner">
+    <a class="logo"><i class="fas fa-person-running"></i> Stride</a>
+    <div class="header-user">
+      <span id="headerName" style="color: white; font-weight: 600;"></span>
+      <div class="avatar-mini" id="headerAvatar"></div>
+    </div>
+  </div>
+  <div class="gp-bar"><i class="fas fa-location-dot"></i> Calibrated for Gauteng · 1,750m altitude</div>
+</header>
+
+<!-- ============ SIGNUP ============ -->
+<div class="screen active" id="screen-signup">
+  <div class="container auth-wrap">
+    <div class="auth-hero"><i class="fas fa-person-running"></i></div>
+    <h1>Welcome to Stride</h1>
+    <p>Gauteng's running app. Just a username and a buddy — no email, no phone.</p>
+    <div class="card" style="text-align:left; margin-top: 20px;">
+      <label for="usernameInput">Choose your username</label>
+      <input type="text" id="usernameInput" placeholder="e.g. ThaboRuns" maxlength="16" autocomplete="off" autocapitalize="off">
+      <p class="hint">4–16 characters. Letters, numbers, underscore.</p>
+      <label>Pick your running buddy</label>
+      <div class="avatar-grid" id="avatarGrid">
+        <div><div class="avatar-option cheetah" data-avatar="cheetah">🐆</div><div class="avatar-name">Cheetah</div></div>
+        <div><div class="avatar-option sloth" data-avatar="sloth">🦥</div><div class="avatar-name">Sloth</div></div>
+        <div><div class="avatar-option bird" data-avatar="bird">🦅</div><div class="avatar-name">Bird</div></div>
+        <div><div class="avatar-option lion" data-avatar="lion">🦁</div><div class="avatar-name">Lion</div></div>
+        <div><div class="avatar-option tiger" data-avatar="tiger">🐯</div><div class="avatar-name">Tiger</div></div>
+      </div>
+      <button class="btn btn-primary" id="signupBtn" style="margin-top: 12px;">
+        <i class="fas fa-arrow-right"></i> Start running
+      </button>
+      <p class="form-msg" id="signupMsg"></p>
+    </div>
+    <button class="btn btn-outline" id="showLoginBtn">
+      <i class="fas fa-right-to-bracket"></i> Already have a username?
+    </button>
+    <p class="hint" style="margin-top: 14px;">Install this app: tap ⋮ in Chrome → "Add to Home screen"</p>
+  </div>
+</div>
+
+<!-- ============ LOGIN ============ -->
+<div class="screen" id="screen-login">
+  <div class="container auth-wrap">
+    <div class="auth-hero"><i class="fas fa-person-running"></i></div>
+    <h1>Welcome back</h1>
+    <p>Enter your username to continue</p>
+    <div class="card" style="text-align:left; margin-top: 20px;">
+      <label for="loginInput">Username</label>
+      <input type="text" id="loginInput" placeholder="Your username" autocomplete="off" autocapitalize="off">
+      <button class="btn btn-primary" id="loginBtn" style="margin-top: 16px;">
+        <i class="fas fa-right-to-bracket"></i> Log in
+      </button>
+      <p class="form-msg" id="loginMsg"></p>
+      <button class="btn btn-outline btn-sm" id="showSignupBtn" style="width:100%; margin-top: 14px;">Create new account</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ DASHBOARD ============ -->
+<div class="screen" id="screen-dashboard">
+  <div class="container">
+    <div class="water-banner" id="waterBanner">
+      <i class="fas fa-droplet"></i>
+      <div style="flex:1;">Hydrate! Gauteng altitude = faster dehydration.</div>
+      <button class="btn btn-sm btn-primary" id="drankBtn">Drank</button>
+    </div>
+
+    <!-- TODAY TARGET + RING -->
+    <div class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-bullseye"></i>Today's target</h2>
+        <span id="todayDate" style="font-size: 0.78rem; color: var(--gray); font-weight: 600;"></span>
+      </div>
+      <div class="ring-wrap">
+        <svg width="170" height="170" viewBox="0 0 170 170">
+          <circle class="ring-bg" cx="85" cy="85" r="70"></circle>
+          <circle class="ring-fg" id="progressRing" cx="85" cy="85" r="70" stroke-dasharray="439.8" stroke-dashoffset="439.8"></circle>
+        </svg>
+        <div class="ring-text">
+          <span class="big" id="ringMiles">0</span>
+          <span class="sub" id="ringTarget">of 5 km</span>
+        </div>
+      </div>
+
+      <!-- START RUN — BIG BUTTON -->
+      <button class="btn btn-start" id="startRunBtn" style="margin-bottom: 10px;">
+        <i class="fas fa-play"></i> Start Run
+      </button>
+
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-outline" id="setTargetBtn" style="flex:1;">
+          <i class="fas fa-pen"></i> Set target
+        </button>
+        <button class="btn btn-outline" id="logRunBtn" style="flex:1;">
+          <i class="fas fa-check"></i> Log done
+        </button>
+      </div>
+    </div>
+
+    <!-- LAST RUN -->
+    <div id="lastRunWrap" style="display:none; margin-bottom: 14px;"></div>
+
+    <!-- STATS -->
+    <div class="stat-row">
+      <div class="stat"><div class="num" id="statTotalKm">0</div><div class="lbl">km total</div></div>
+      <div class="stat green"><div class="num" id="statStreak">0</div><div class="lbl">day streak</div></div>
+      <div class="stat peach"><div class="num" id="statLost">0.0</div><div class="lbl">kg lost</div></div>
+    </div>
+
+    <!-- QUICK ROUTES -->
+    <div class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-map-location-dot"></i>Quick routes</h2>
+        <button class="btn btn-sm btn-outline" id="planRouteBtn" style="padding: 6px 14px; font-size: 0.78rem;">
+          <i class="fas fa-plus"></i> Custom
+        </button>
+      </div>
+      <div id="routeList"></div>
+    </div>
+
+    <!-- BADGES -->
+    <div class="card">
+      <div class="card-header"><h2><i class="fas fa-medal"></i>Badges</h2></div>
+      <div class="badge-grid" id="badgeGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ CHALLENGES ============ -->
+<div class="screen" id="screen-challenges">
+  <div class="container">
+    <h2 style="color: var(--blue-deep); margin-bottom: 14px;"><i class="fas fa-trophy"></i> Friend challenges</h2>
+    <button class="btn btn-peach" id="newChallengeBtn" style="margin-bottom: 16px;">
+      <i class="fas fa-plus"></i> New challenge
+    </button>
+    <div id="challengesList"></div>
+  </div>
+</div>
+
+<!-- ============ PROFILE ============ -->
+<div class="screen" id="screen-profile">
+  <div class="container">
+    <h2 style="color: var(--blue-deep); margin-bottom: 14px;"><i class="fas fa-user"></i> Profile</h2>
+
+    <div class="card" style="text-align:center;">
+      <div class="avatar-mini" id="profileAvatar" style="width:90px; height:90px; font-size:3rem; margin: 0 auto 10px; border-width: 4px;"></div>
+      <h3 id="profileName" style="color: var(--blue-deep);"></h3>
+      <p style="margin-top: 4px;">Member since <span id="profileSince"></span></p>
+      <span class="pill water" style="margin-top: 10px;"><i class="fas fa-location-dot"></i> Gauteng</span>
+    </div>
+
+    <div class="card">
+      <h3 style="color: var(--blue-deep);"><i class="fas fa-weight-scale"></i> Weight tracking</h3>
+      <p style="font-size: 0.85rem; margin-top: 4px;">Enter your weight weekly. We calculate how much you've lost from your runs.</p>
+      <label for="weightInput">Current weight (kg)</label>
+      <input type="number" id="weightInput" step="0.1" placeholder="e.g. 72.5">
+      <button class="btn btn-primary" id="saveWeightBtn" style="margin-top: 12px;">
+        <i class="fas fa-check"></i> Save weight
+      </button>
+      <div class="stat-row" style="margin-top: 14px;">
+        <div class="stat"><div class="num" id="startWeight">—</div><div class="lbl">start</div></div>
+        <div class="stat green"><div class="num" id="currentWeight">—</div><div class="lbl">current</div></div>
+        <div class="stat peach"><div class="num" id="totalLost">—</div><div class="lbl">kg lost</div></div>
+      </div>
+      <p class="hint">Estimates assume ~60 kcal burned per km.</p>
+    </div>
+
+    <div class="card">
+      <h3 style="color: var(--blue-deep);"><i class="fas fa-utensils"></i> Today's calories</h3>
+      <p style="font-size: 0.85rem; margin-top: 4px;">Log intake to refine your weight loss estimate.</p>
+      <label for="calorieInput">Calories eaten today</label>
+      <input type="number" id="calorieInput" placeholder="e.g. 1800">
+      <button class="btn btn-primary" id="saveCaloriesBtn" style="margin-top: 12px;">
+        <i class="fas fa-check"></i> Save
+      </button>
+      <p class="hint">Target: <strong id="calorieTarget">2000</strong> kcal/day · ~60 kcal burned per km run.</p>
+    </div>
+
+    <div class="card">
+      <h3 style="color: var(--blue-deep);"><i class="fas fa-glass-water"></i> Hydration</h3>
+      <p style="font-size: 0.85rem; margin-top: 4px;">Aim for 8 glasses. Highveld altitude increases water loss.</p>
+      <div class="water-track" id="waterTrack"></div>
+      <p class="hint" style="text-align:center; margin-top: 10px;">
+        <strong id="waterCount">0</strong> of 8 glasses today
+      </p>
+    </div>
+
+    <div class="card">
+      <h3 style="color: var(--danger);"><i class="fas fa-triangle-exclamation"></i> SOS & Trusted contact</h3>
+      <p style="font-size: 0.85rem; margin-top: 4px;">Your contact gets dialled when you tap SOS.</p>
+      <label for="contactName">Contact name</label>
+      <input type="text" id="contactName" placeholder="e.g. Mom">
+      <label for="contactPhone">Contact phone</label>
+      <input type="tel" id="contactPhone" placeholder="e.g. 0821234567">
+      <button class="btn btn-primary" id="saveContactBtn" style="margin-top: 12px;">
+        <i class="fas fa-save"></i> Save contact
+      </button>
+      <div class="divider"></div>
+      <p style="font-size: 0.82rem; color: var(--gray); line-height: 1.65;">
+        <strong style="color: var(--blue-deep);">Emergency (South Africa):</strong><br>
+        🚨 <strong>112</strong> — fastest, works on any network<br>
+        🚓 <strong>10111</strong> — SAPS call centre<br>
+        💚 <strong>0800 428 428</strong> — GBV Command Centre<br>
+        🚑 <strong>10177</strong> — Ambulance<br>
+        💡 Install <strong>Namola</strong> for GPS-linked SAPS response.
+      </p>
+    </div>
+
+    <button class="btn btn-outline" id="logoutBtn" style="color: var(--danger); border-color: var(--danger-light);">
+      <i class="fas fa-right-from-bracket"></i> Log out
+    </button>
+    <p class="hint" style="text-align:center; margin-top: 10px;">Data saved on this device. Install as app for offline use.</p>
+  </div>
+</div>
+
+<nav class="bottom-nav" id="bottomNav" style="display:none;">
+  <button class="nav-item active" data-screen="dashboard"><i class="fas fa-house"></i>Home</button>
+  <button class="nav-item" data-screen="challenges"><i class="fas fa-trophy"></i>Challenges</button>
+  <button class="nav-item" data-screen="profile"><i class="fas fa-user"></i>Profile</button>
+</nav>
+
+<button class="sos-fab" id="sosFab" style="display:none;">
+  <i class="fas fa-tower-broadcast"></i>SOS
+</button>
+
+<div class="modal-overlay" id="modalOverlay"><div class="modal" id="modalContent"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =============================================================
+   STRIDE — Gauteng Running PWA
+   ============================================================= */
+const STORAGE_KEY = 'stride_gp_v2';
+const SESSION_KEY = 'stride_gp_session_v2';
+const AVATAR_EMOJI = { cheetah:'🐆', sloth:'🦥', bird:'🦅', lion:'🦁', tiger:'🐯' };
+
+/* GAUTENG PRESET ROUTES */
+const GAUTENG_ROUTES = [
+  { name:'Emmarentia Dam',        area:'Johannesburg',  km:5,   type:'water', icon:'fa-water' },
+  { name:'Zoo Lake',              area:'Rosebank, JHB', km:2.5, type:'water', icon:'fa-water' },
+  { name:'Delta Park',            area:'Victory Park',  km:4,   type:'green', icon:'fa-tree' },
+  { name:'Melrose Arch Loop',     area:'Birnam, JHB',   km:3,   type:'peach', icon:'fa-city' },
+  { name:'Walter Sisulu Garden',  area:'Roodepoort',    km:6,   type:'green', icon:'fa-mountain-sun' },
+  { name:'Klipriviersberg',       area:'South JHB',     km:8,   type:'peach', icon:'fa-mountain' },
+  { name:'Rietvlei Nature Reserve', area:'Pretoria',    km:10,  type:'water', icon:'fa-water' },
+  { name:'Groenkloof Reserve',    area:'Pretoria',      km:7,   type:'green', icon:'fa-tree' },
+  { name:'Modderfontein Reserve', area:'Edenvale',      km:6,   type:'water', icon:'fa-water' },
+  { name:'Fountains Valley',      area:'Pretoria',      km:5,   type:'green', icon:'fa-tree' }
+];
+
+const $ = id => document.getElementById(id);
+
+function loadUsers(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY))||{}; }catch{ return {}; } }
+function saveUsers(u){ localStorage.setItem(STORAGE_KEY, JSON.stringify(u)); }
+function setSession(k){ localStorage.setItem(SESSION_KEY, k); }
+function getSession(){ return localStorage.getItem(SESSION_KEY); }
+function clearSession(){ localStorage.removeItem(SESSION_KEY); }
+function todayKey(){ return new Date().toISOString().slice(0,10); }
+
+function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); $(id).classList.add('active'); window.scrollTo(0,0); }
+function showToast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2400); }
+function openModal(html){ $('modalContent').innerHTML=html; $('modalOverlay').classList.add('open'); }
+function closeModal(){ $('modalOverlay').classList.remove('open'); }
+window.closeModal = closeModal;
+$('modalOverlay').addEventListener('click', e => { if(e.target.id==='modalOverlay') closeModal(); });
+
+/* OPEN GOOGLE MAPS with directions
+   - If start is empty: uses "current location" via Google Maps
+   - If start is set: full A → B route
+   - Mode: walking (best for running) */
+function openGoogleMaps(startQuery, endQuery){
+  let url = 'https://www.google.com/maps/dir/?api=1&travelmode=walking';
+  if (startQuery && startQuery.trim()) {
+    url += '&origin=' + encodeURIComponent(startQuery.trim() + ', Gauteng, South Africa');
+  } else {
+    url += '&origin=My+Location';
+  }
+  url += '&destination=' + encodeURIComponent(endQuery.trim() + ', Gauteng, South Africa');
+  window.open(url, '_blank');
+}
+
+let currentUser = null;
+let selectedAvatar = null;
+
+/* ============ SIGNUP ============ */
+document.querySelectorAll('.avatar-option').forEach(opt=>{
+  opt.addEventListener('click', ()=>{
+    document.querySelectorAll('.avatar-option').forEach(o=>o.classList.remove('selected'));
+    opt.classList.add('selected');
+    selectedAvatar = opt.dataset.avatar;
+  });
+});
+
+$('signupBtn').addEventListener('click', ()=>{
+  const name = $('usernameInput').value.trim();
+  const msg = $('signupMsg'); msg.className='form-msg';
+  if(!/^[a-zA-Z0-9_]{4,16}$/.test(name)){ msg.textContent='Username must be 4–16 characters (letters, numbers, _)'; msg.classList.add('error'); return; }
+  if(!selectedAvatar){ msg.textContent='Pick a running buddy first!'; msg.classList.add('error'); return; }
+  const users = loadUsers();
+  if(users[name.toLowerCase()]){ msg.textContent='That username is taken on this device.'; msg.classList.add('error'); return; }
+  users[name.toLowerCase()] = {
+    username:name, avatar:selectedAvatar, createdAt:Date.now(),
+    targetKm:5, runs:[], badges:[],
+    weightStart:null, weightCurrent:null, weightHistory:[],
+    caloriesToday:0, calorieDate:todayKey(),
+    contactName:'', contactPhone:'',
+    challenges:[], waterCount:0, lastWaterReminder:null, waterDate:todayKey()
+  };
+  saveUsers(users); setSession(name.toLowerCase()); loginAs(name.toLowerCase());
+  requestNotificationPermission();
+});
+
+/* ============ LOGIN ============ */
+$('showLoginBtn').addEventListener('click', ()=>show('screen-login'));
+$('showSignupBtn').addEventListener('click', ()=>show('screen-signup'));
+$('loginBtn').addEventListener('click', ()=>{
+  const name = $('loginInput').value.trim().toLowerCase();
+  const msg = $('loginMsg'); msg.className='form-msg';
+  const users = loadUsers();
+  if(!users[name]){ msg.textContent='Username not found on this device.'; msg.classList.add('error'); return; }
+  setSession(name); loginAs(name);
+});
+
+$('logoutBtn').addEventListener('click', ()=>{
+  clearSession(); currentUser=null;
+  $('appHeader').style.display='none'; $('bottomNav').style.display='none'; $('sosFab').style.display='none';
+  show('screen-login');
+});
+
+function loginAs(key){
+  const users = loadUsers();
+  currentUser = users[key];
+  if(!currentUser) return;
+  if(currentUser.calorieDate !== todayKey()){ currentUser.caloriesToday=0; currentUser.calorieDate=todayKey(); }
+  if(currentUser.waterDate !== todayKey()){ currentUser.waterCount=0; currentUser.waterDate=todayKey(); }
+  saveUsers(users);
+
+  $('appHeader').style.display='block'; $('bottomNav').style.display='flex'; $('sosFab').style.display='flex';
+  $('headerName').textContent = currentUser.username;
+  $('headerAvatar').textContent = AVATAR_EMOJI[currentUser.avatar];
+
+  renderDashboard(); renderRoutes(); renderChallenges(); renderProfile();
+  show('screen-dashboard');
+}
+
+/* ============ NAV ============ */
+document.querySelectorAll('.nav-item').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const s = btn.dataset.screen;
+    show('screen-'+s);
+    if(s==='dashboard'){ renderDashboard(); renderRoutes(); }
+    if(s==='challenges') renderChallenges();
+    if(s==='profile') renderProfile();
+  });
+});
+
+/* ============ DASHBOARD ============ */
+function renderDashboard(){
+  if(!currentUser) return;
+  const users = loadUsers();
+  const u = users[currentUser.username.toLowerCase()];
+  currentUser = u;
+  const today = todayKey();
+  const todayKm = u.runs.filter(r=>r.date===today).reduce((s,r)=>s+r.km,0);
+  const totalKm = u.runs.reduce((s,r)=>s+r.km,0);
+  const progress = Math.min(todayKm / (u.targetKm||5), 1);
+
+  $('todayDate').textContent = new Date().toLocaleDateString('en-ZA',{weekday:'short',day:'numeric',month:'short'});
+  $('ringMiles').textContent = todayKm.toFixed(1);
+  $('ringTarget').textContent = 'of ' + (u.targetKm||5) + ' km';
+  const circ = 2*Math.PI*70;
+  $('progressRing').setAttribute('stroke-dashoffset', circ*(1-progress));
+
+  $('statTotalKm').textContent = totalKm.toFixed(1);
+  $('statStreak').textContent = calculateStreak(u.runs);
+  const lost = (u.weightStart && u.weightCurrent) ? (u.weightStart-u.weightCurrent) : 0;
+  $('statLost').textContent = lost.toFixed(1);
+
+  // Last run summary
+  const lrWrap = $('lastRunWrap');
+  if (u.runs.length) {
+    const last = u.runs[u.runs.length-1];
+    const when = new Date(last.at);
+    const diff = (Date.now() - last.at) / 1000;
+    let ago = '';
+    if (diff < 3600) ago = Math.floor(diff/60) + ' min ago';
+    else if (diff < 86400) ago = Math.floor(diff/3600) + ' hr ago';
+    else ago = Math.floor(diff/86400) + ' days ago';
+    lrWrap.style.display = 'block';
+    lrWrap.innerHTML = `
+      <div class="last-run">
+        <div class="lr-icon">🏁</div>
+        <div class="lr-info">
+          <strong>${last.km.toFixed(1)} km ${last.min?('· '+last.min+' min'):''}</strong>
+          <small>Last run · ${ago}</small>
+        </div>
+      </div>`;
+  } else {
+    lrWrap.style.display = 'none';
+  }
+
+  renderBadges(u, totalKm, todayKm);
+  renderWaterReminder(u);
+}
+
+function calculateStreak(runs){
+  if(!runs.length) return 0;
+  const days = new Set(runs.map(r=>r.date));
+  let streak=0; let d=new Date();
+  while(true){
+    const k = d.toISOString().slice(0,10);
+    if(days.has(k)){ streak++; d.setDate(d.getDate()-1); } else break;
+    if(streak>365) break;
+  }
+  return streak;
+}
+
+/* ============ BADGES ============ */
+const BADGE_DEFS = [
+  { id:'first_run',  label:'First Step',    icon:'👟', cls:'peach', check:(u,t)=>t>=1 },
+  { id:'five_km',    label:'5K Hero',       icon:'🥉', cls:'blue',  check:(u,t)=>t>=5 },
+  { id:'ten_km',     label:'10K Strong',    icon:'🥈', cls:'blue',  check:(u,t)=>t>=10 },
+  { id:'half_mar',   label:'Half Marathon', icon:'🥇', cls:'green', check:(u,t)=>t>=21.1 },
+  { id:'marathon',   label:'Marathon',      icon:'🏆', cls:'green', check:(u,t)=>t>=42.2 },
+  { id:'streak_3',   label:'3-Day Streak',  icon:'🔥', cls:'peach', check:(u)=>calculateStreak(u.runs)>=3 },
+  { id:'streak_7',   label:'Week Warrior',  icon:'⚡', cls:'peach', check:(u)=>calculateStreak(u.runs)>=7 },
+  { id:'target_hit', label:'Target Hit',    icon:'🎯', cls:'blue',  check:(u,t,k)=>k>=(u.targetKm||5) },
+  { id:'water_hero', label:'Hydrated',      icon:'💧', cls:'blue',  check:(u)=>(u.waterCount||0)>=8 }
+];
+
+function renderBadges(u, totalKm, todayKm){
+  const grid = $('badgeGrid'); grid.innerHTML='';
+  BADGE_DEFS.forEach(def=>{
+    const earned = def.check(u, totalKm, todayKm);
+    if(earned && !u.badges.includes(def.id)){
+      u.badges.push(def.id);
+      const users = loadUsers();
+      users[u.username.toLowerCase()] = u;
+      saveUsers(users);
+      showToast('🎉 Badge: ' + def.label);
+    }
+    const div = document.createElement('div');
+    div.className = 'badge ' + (earned ? 'earned ' + (def.cls||'') : 'locked');
+    div.innerHTML = `<div>${def.icon}</div><div class="badge-label">${def.label}</div>`;
+    grid.appendChild(div);
+  });
+}
+
+/* ============ WATER ============ */
+function renderWaterReminder(u){
+  const banner = $('waterBanner');
+  const last = u.lastWaterReminder || 0;
+  if(Date.now() - last > 45*60*1000 && (u.waterCount||0) < 8) banner.style.display='flex';
+  else banner.style.display='none';
+}
+$('drankBtn').addEventListener('click', ()=>{
+  const users = loadUsers();
+  const u = users[currentUser.username.toLowerCase()];
+  u.waterCount = (u.waterCount||0) + 1;
+  u.lastWaterReminder = Date.now();
+  users[u.username.toLowerCase()] = u;
+  saveUsers(users); currentUser = u;
+  $('waterBanner').style.display='none';
+  showToast('💧 Nice! ' + u.waterCount + ' glasses today');
+  renderDashboard(); renderProfile();
+});
+setInterval(()=>{ if(currentUser) renderWaterReminder(currentUser); }, 60000);
+
+/* ============ QUICK ROUTES ============ */
+function renderRoutes(){
+  const list = $('routeList'); if(!list) return;
+  list.innerHTML = '';
+  GAUTENG_ROUTES.forEach(r=>{
+    const div = document.createElement('div');
+    div.className = 'route-item ' + (r.type==='water'?'water':r.type==='peach'?'peach':'');
+    div.innerHTML = `
+      <i class="fas ${r.icon} route-icon"></i>
+      <div class="route-info">
+        <strong>${r.name}</strong>
+        <small>${r.area} · ~${r.km} km</small>
+      </div>
+      <i class="fas fa-diamond-turn-right route-arrow"></i>
+    `;
+    div.addEventListener('click', ()=>{
+      openGoogleMaps('', r.name);
+      showToast('Opening Google Maps…');
+    });
+    list.appendChild(div);
+  });
+}
+
+/* ============ START RUN (BIG BUTTON) ============ */
+$('startRunBtn').addEventListener('click', ()=>{
+  const u = currentUser;
+  openModal(`
+    <h2><i class="fas fa-play" style="color: var(--green);"></i> Start your run</h2>
+    <p style="margin-top: 6px;">Where are you running today?</p>
+
+    <div style="margin-top: 16px;">
+      <button class="btn btn-green" id="usePresetBtn">
+        <i class="fas fa-map-location-dot"></i> Pick a Gauteng route
+      </button>
+      <button class="btn btn-outline" id="customRouteBtn" style="margin-top: 10px;">
+        <i class="fas fa-route"></i> Plan my own route
+      </button>
+      <button class="btn btn-outline" id="justStartBtn" style="margin-top: 10px;">
+        <i class="fas fa-location-crosshairs"></i> Just go — from where I am
+      </button>
+    </div>
+
+    <p class="hint" style="margin-top: 14px;">Google Maps opens with walking directions. Come back here to log your distance.</p>
+
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+    </div>
+  `);
+
+  $('usePresetBtn').addEventListener('click', ()=>{ closeModal(); openPresetPicker(); });
+  $('customRouteBtn').addEventListener('click', ()=>{ closeModal(); openCustomRoute(); });
+  $('justStartBtn').addEventListener('click', ()=>{
+    closeModal();
+    openGoogleMaps('', currentUser.username + ' run start'); // just "here"
+    // Actually better: use "My Location" → no destination needed. Fallback to a default.
+    window.open('https://www.google.com/maps/@?api=1&map_action=map&center=My+Location', '_blank');
+    showToast('Opening Maps from your location…');
+  });
+});
+
+/* ============ PRESET PICKER ============ */
+function openPresetPicker(){
+  const items = GAUTENG_ROUTES.map((r, i) => `
+    <div class="route-item ${r.type==='water'?'water':r.type==='peach'?'peach':''}" data-idx="${i}">
+      <i class="fas ${r.icon} route-icon"></i>
+      <div class="route-info">
+        <strong>${r.name}</strong>
+        <small>${r.area} · ~${r.km} km</small>
+      </div>
+      <i class="fas fa-diamond-turn-right route-arrow"></i>
+    </div>
+  `).join('');
+  openModal(`
+    <h2>Pick a route</h2>
+    <p style="margin-top: 6px;">Google Maps opens with walking directions.</p>
+    <div style="margin-top: 14px;">${items}</div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">Back</button>
+    </div>
+  `);
+  document.querySelectorAll('#modalContent .route-item').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const r = GAUTENG_ROUTES[parseInt(el.dataset.idx)];
+      closeModal();
+      openGoogleMaps('', r.name);
+      showToast('Opening ' + r.name + '…');
+    });
+  });
+}
+
+/* ============ CUSTOM ROUTE PLANNER ============ */
+function openCustomRoute(){
+  openModal(`
+    <h2><i class="fas fa-route" style="color: var(--green);"></i> Plan your route</h2>
+    <p style="margin-top: 6px;">Enter your start and end. Google Maps will guide you.</p>
+
+    <label for="startInput">Starting point</label>
+    <input type="text" id="startInput" placeholder="e.g. Sandton City, my house on 5th Ave" autofocus>
+
+    <label for="endInput">Destination</label>
+    <input type="text" id="endInput" placeholder="e.g. Delta Park, Zoo Lake">
+
+    <p class="hint" style="margin-top: 10px; text-align: left;">
+      💡 Tip: leave start empty to run from where you are now.
+    </p>
+
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-green" id="goCustomRouteBtn"><i class="fas fa-play"></i> Go</button>
+    </div>
+  `);
+  $('goCustomRouteBtn').addEventListener('click', ()=>{
+    const start = $('startInput').value.trim();
+    const end = $('endInput').value.trim();
+    if(!end){ showToast('Enter a destination'); return; }
+    closeModal();
+    openGoogleMaps(start, end);
+    showToast('Opening directions…');
+  });
+}
+
+/* Custom route button on the Quick Routes card header */
+$('planRouteBtn').addEventListener('click', ()=>openCustomRoute());
+
+/* ============ LOG RUN ============ */
+$('logRunBtn').addEventListener('click', ()=>{
+  openModal(`
+    <h2>Log your run</h2>
+    <p style="margin-top: 6px;">Enter the distance you completed.</p>
+    <label for="runKm">Distance (km)</label>
+    <input type="number" id="runKm" step="0.1" placeholder="e.g. 5.2" autofocus>
+    <label for="runMin">Duration (minutes) — optional</label>
+    <input type="number" id="runMin" placeholder="e.g. 32">
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-peach" id="confirmRunBtn">Log it</button>
+    </div>
+  `);
+  $('confirmRunBtn').addEventListener('click', ()=>{
+    const km = parseFloat($('runKm').value);
+    const min = parseFloat($('runMin').value)||0;
+    if(!km || km<=0 || km>100){ showToast('Enter a valid distance'); return; }
+    const users = loadUsers();
+    const u = users[currentUser.username.toLowerCase()];
+    u.runs.push({ date:todayKey(), km, min, at:Date.now() });
+    users[u.username.toLowerCase()] = u;
+    saveUsers(users); currentUser = u;
+    closeModal(); renderDashboard();
+    showToast('✅ Run logged! ' + km.toFixed(1) + ' km');
+  });
+});
+
+/* ============ SET TARGET ============ */
+$('setTargetBtn').addEventListener('click', ()=>{
+  openModal(`
+    <h2>Daily target</h2>
+    <p style="margin-bottom: 12px;">How many km do you want to run each day?</p>
+    <label for="targetInput">Target (km)</label>
+    <input type="number" id="targetInput" step="0.5" value="${currentUser.targetKm||5}" autofocus>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" id="saveTargetBtn">Save</button>
+    </div>
+  `);
+  $('saveTargetBtn').addEventListener('click', ()=>{
+    const t = parseFloat($('targetInput').value);
+    if(!t || t<=0){ showToast('Enter a valid number'); return; }
+    const users = loadUsers();
+    const u = users[currentUser.username.toLowerCase()];
+    u.targetKm = t; users[u.username.toLowerCase()]=u;
+    saveUsers(users); currentUser=u;
+    closeModal(); renderDashboard();
+    showToast('🎯 Target: ' + t + ' km/day');
+  });
+});
+
+/* ============ CHALLENGES ============ */
+$('newChallengeBtn').addEventListener('click', ()=>{
+  openModal(`
+    <h2>New challenge</h2>
+    <p style="margin-bottom: 12px;">Challenge a friend on this device. 7 days, first to the km target.</p>
+    <label for="chFriend">Friend's username</label>
+    <input type="text" id="chFriend" placeholder="e.g. LeratoRuns" autofocus autocapitalize="off">
+    <label for="chKm">Target distance (km)</label>
+    <input type="number" id="chKm" step="0.5" value="20">
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-peach" id="createChBtn">Start</button>
+    </div>
+  `);
+  $('createChBtn').addEventListener('click', ()=>{
+    const friend = $('chFriend').value.trim().toLowerCase();
+    const km = parseFloat($('chKm').value);
+    if(!friend || !km || km<=0){ showToast('Fill both fields'); return; }
+    if(friend === currentUser.username.toLowerCase()){ showToast("Can't challenge yourself!"); return; }
+    const users = loadUsers();
+    if(!users[friend]){ showToast('Friend not found on this device'); return; }
+    const u = users[currentUser.username.toLowerCase()];
+    u.challenges.push({
+      friendKey:friend, friendName:users[friend].username,
+      targetKm:km, startAt:Date.now(), endAt:Date.now()+7*24*60*60*1000,
+      friendKmAtStart: users[friend].runs.reduce((s,r)=>s+r.km,0),
+      myKmAtStart: u.runs.reduce((s,r)=>s+r.km,0)
+    });
+    users[u.username.toLowerCase()]=u; saveUsers(users); currentUser=u;
+    closeModal(); renderChallenges();
+    showToast('🏁 Challenge started!');
+  });
+});
+
+function renderChallenges(){
+  if(!currentUser) return;
+  const users = loadUsers();
+  const u = users[currentUser.username.toLowerCase()]; currentUser = u;
+  const list = $('challengesList'); if(!list) return;
+  list.innerHTML = '';
+  if(!u.challenges.length){
+    list.innerHTML = '<div class="empty"><i class="fas fa-trophy"></i>No challenges yet. Start one!</div>';
+    return;
+  }
+  u.challenges.forEach(ch=>{
+    const me = u.runs.reduce((s,r)=>s+r.km,0) - ch.myKmAtStart;
+    const fu = users[ch.friendKey];
+    const friendKm = fu ? fu.runs.reduce((s,r)=>s+r.km,0) - ch.friendKmAtStart : 0;
+    const myPct = Math.min(me/ch.targetKm,1)*100;
+    const frPct = Math.min(friendKm/ch.targetKm,1)*100;
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.innerHTML = `
+      <div class="card-header">
+        <h3>vs ${ch.friendName}</h3>
+        <span style="font-size: 0.75rem; color: var(--gray); font-weight: 700;">${ch.targetKm} km · 7 days</span>
+      </div>
+      <div class="challenge">
+        <span class="challenge-avatar">${AVATAR_EMOJI[u.avatar]}</span>
+        <div class="challenge-info">
+          <strong>${u.username} — ${me.toFixed(1)} km</strong>
+          <div class="challenge-bar"><div style="width:${myPct}%"></div></div>
+        </div>
+      </div>
+      <div class="challenge peach">
+        <span class="challenge-avatar">${fu?AVATAR_EMOJI[fu.avatar]:'👤'}</span>
+        <div class="challenge-info">
+          <strong>${ch.friendName} — ${friendKm.toFixed(1)} km</strong>
+          <div class="challenge-bar"><div style="width:${frPct}%"></div></div>
+        </div>
+      </div>
+    `;
+    list.appendChild(div);
+  });
+}
+
+/* ============ PROFILE ============ */
+function renderProfile(){
+  if(!currentUser) return;
+  const users = loadUsers();
+  const u = users[currentUser.username.toLowerCase()]; currentUser = u;
+
+  $('profileAvatar').textContent = AVATAR_EMOJI[u.avatar];
+  $('profileName').textContent = u.username;
+  $('profileSince').textContent = new Date(u.createdAt).toLocaleDateString('en-ZA',{month:'long',year:'numeric'});
+  $('startWeight').textContent = u.weightStart?u.weightStart.toFixed(1):'—';
+  $('currentWeight').textContent = u.weightCurrent?u.weightCurrent.toFixed(1):'—';
+  const lost = (u.weightStart && u.weightCurrent) ? (u.weightStart-u.weightCurrent) : 0;
+  $('totalLost').textContent = lost ? lost.toFixed(1) : '—';
+  $('contactName').value = u.contactName||'';
+  $('contactPhone').value = u.contactPhone||'';
+  $('calorieInput').value = u.caloriesToday||'';
+  $('waterCount').textContent = u.waterCount||0;
+
+  const track = $('waterTrack'); track.innerHTML = '';
+  for(let i=0;i<8;i++){
+    const g = document.createElement('div');
+    g.className = 'water-glass' + (i<(u.waterCount||0)?' full':'');
+    track.appendChild(g);
+  }
+}
+
+$('saveWeightBtn').addEventListener('click', ()=>{
+  const w = parseFloat($('weightInput').value);
+  if(!w || w<20 || w>300){ showToast('Enter a valid weight (kg)'); return; }
+  const users = loadUsers();
+  const u = users[currentUser.username.toLowerCase()];
+  if(!u.weightStart) u.weightStart = w;
+  u.weightCurrent = w;
+  u.weightHistory.push({ date:todayKey(), kg:w });
+  users[u.username.toLowerCase()]=u; saveUsers(users); currentUser=u;
+  $('weightInput').value='';
+  renderProfile(); renderDashboard();
+  showToast('⚖️ Weight saved');
+});
+
+$('saveCaloriesBtn').addEventListener('click', ()=>{
+  const c = parseFloat($('calorieInput').value);
+  if(!c || c<0 || c>10000){ showToast('Enter valid calories'); return; }
+  const users = loadUsers();
+  const u = users[currentUser.username.toLowerCase()];
+  u.caloriesToday = c; u.calorieDate = todayKey();
+  users[u.username.toLowerCase()]=u; saveUsers(users); currentUser=u;
+  showToast('🍽️ Calories saved');
+});
+
+$('saveContactBtn').addEventListener('click', ()=>{
+  const name = $('contactName').value.trim();
+  const phone = $('contactPhone').value.trim();
+  const users = loadUsers();
+  const u = users[currentUser.username.toLowerCase()];
+  u.contactName = name; u.contactPhone = phone;
+  users[u.username.toLowerCase()]=u; saveUsers(users); currentUser=u;
+  showToast('✅ Trusted contact saved');
+});
+
+/* ============ SOS ============ */
+$('sosFab').addEventListener('click', ()=>{
+  const u = currentUser;
+  const contact = u.contactName && u.contactPhone
+    ? `<p style="margin-top:8px; padding:10px; background:var(--green-pale); border-radius:12px;"><strong>${u.contactName}:</strong> ${u.contactPhone}</p>`
+    : '<p style="margin-top:8px; color: var(--gray);">No trusted contact set.</p>';
+  openModal(`
+    <h2 style="color: var(--danger);"><i class="fas fa-triangle-exclamation"></i> Emergency SOS</h2>
+    <p style="margin-top: 6px;">Choose who to dial. Stay on the line and describe your location.</p>
+    ${contact}
+    <div style="display:flex; flex-direction:column; gap:10px; margin-top: 18px;">
+      <button class="btn btn-danger" onclick="dial('112')"><i class="fas fa-phone"></i> 112 — Fastest (any network)</button>
+      <button class="btn btn-danger" onclick="dial('10111')"><i class="fas fa-phone"></i> 10111 — SAPS</button>
+      ${u.contactPhone ? `<button class="btn btn-primary" onclick="dial('${u.contactPhone.replace(/'/g,'')}')"><i class="fas fa-phone"></i> Call ${u.contactName || 'contact'}</button>` : ''}
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+    </div>
+    <p class="hint" style="margin-top: 14px;">For GPS-linked SAPS response, install <strong>Namola</strong>.</p>
+  `);
+});
+function dial(n){ window.location.href = 'tel:' + n; }
+window.dial = dial;
+
+/* ============ NOTIFICATIONS ============ */
+function requestNotificationPermission(){
+  if('Notification' in window && Notification.permission === 'default'){
+    Notification.requestPermission();
+  }
+}
+
+/* ============ SERVICE WORKER ============ */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+
+/* ============ BOOT ============ */
+(function init(){
+  const s = getSession();
+  const users = loadUsers();
+  if(s && users[s]) loginAs(s);
+  else show('screen-signup');
+})();
+</script>
+</body>
+</html
