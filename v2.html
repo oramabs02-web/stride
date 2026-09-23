@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stride - Modern Fitness & Health</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary: #FF5E62;
+            --secondary: #FF9966;
+            --accent: #4E65FF;
+            --success: #10B981;
+            --bg: #090D16;
+            --card-bg: #1E293B;
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text: #F8FAFC;
+            --text-muted: #94A3B8;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .phone-frame {
+            width: 100%;
+            max-width: 420px;
+            min-height: 100vh;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 0 40px rgba(0,0,0,0.6);
+            padding-bottom: 90px;
+        }
+
+        .header {
+            padding: 20px 20px 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+        }
+
+        .badge-pill {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38BDF8;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        .view {
+            display: none;
+            padding: 0 20px;
+            flex-direction: column;
+            gap: 16px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .view.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 20px -4px rgba(0,0,0,0.2);
+        }
+
+        .card h3 {
+            margin: 0 0 12px 0;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #F1F5F9;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-gradient {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-weight: 800;
+            border-radius: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 94, 98, 0.4);
+            transition: transform 0.1s ease, filter 0.2s;
+            width: 100%;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        .btn-gradient:active { transform: scale(0.97); filter: brightness(0.9); }
+
+        .ai-card {
+            background: linear-gradient(135deg, rgba(78, 101, 255, 0.15), rgba(146, 239, 253, 0.1));
+            border: 1px solid rgba(78, 101, 255, 0.3);
+        }
+
+        .ai-tip-text {
+            font-size: 0.9rem;
+            color: #CBD5E1;
+            line-height: 1.5;
+            margin: 0 0 12px 0;
+        }
+
+        .ai-action-btn {
+            background: rgba(78, 101, 255, 0.3);
+            color: #92EFFD;
+            border: 1px solid rgba(146, 239, 253, 0.4);
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .water-widget {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+
+        .human-container {
+            width: 80px;
+            height: 150px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        .human-svg {
+            width: 100%;
+            height: 100%;
+            fill: rgba(255, 255, 255, 0.05);
+            stroke: #38BDF8;
+            stroke-width: 3;
+            filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.3));
+        }
+
+        .water-wave-fill {
+            position: absolute;
+            bottom: 0;
+            left: 5px;
+            right: 5px;
+            width: 70px;
+            background: linear-gradient(to top, #00C6FF, #0072FF);
+            border-radius: 0 0 25px 25px;
+            height: 0%;
+            transition: height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 2;
+            opacity: 0.85;
+        }
+
+        .water-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .water-stats p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .loader-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(9, 13, 22, 0.85);
+            backdrop-filter: blur(5px);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            gap: 15px;
+        }
+
+        .running-man {
+            font-size: 3rem;
+            animation: runBounce 0.5s infinite alternate;
+        }
+
+        @keyframes runBounce {
+            from { transform: translateY(0) scaleX(1); }
+            to { transform: translateY(-12px) scaleX(1.08); }
+        }
+
+        .loader-text {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #38BDF8;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 420px;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--card-border);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            z-index: 50;
+        }
+
+        .nav-item {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-family: inherit;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .nav-item span { font-size: 1.25rem; }
+        .nav-item.active { color: var(--primary); }
+    </style>
+</head>
+<body>
+
+    <div class="phone-frame">
+        
+        <div class="header">
+            <h1 class="logo">Stride</h1>
+            <div class="badge-pill">📍 Highveld Optimized</div>
+        </div>
+
+        <div class="loader-overlay" id="loaderOverlay">
+            <div class="running-man">🏃🏽‍♂️</div>
+            <div class="loader-text" id="loaderText">Syncing Stride...</div>
+        </div>
+
+        <div class="view active" id="view-home">
+            <div class="card ai-card">
+                <h3>🤖 Stride AI Health Coach</h3>
+                <p class="ai-tip-text" id="aiTip">"High altitude increases breath rate and fluid evaporation. Ensure you sip water consistently before your run today!"</p>
+                <button class="ai-action-btn" onclick="nextAITip()">✨ Generate New Tip</button>
+            </div>
+
+            <div class="card">
+                <h3>💧 Smart Hydration</h3>
+                <div class="water-widget">
+                    <div class="human-container">
+                        <svg class="human-svg" viewBox="0 0 100 200">
+                            <path d="M50 15 C40 15 32 23 32 33 C32 43 40 51 50 51 C60 51 68 43 68 33 C68 23 60 15 50 15 Z M25 60 C15 60 10 65 10 75 L10 115 C10 120 14 124 19 124 C24 124 28 120 28 115 L28 80 L35 80 L35 175 C35 182 41 188 48 188 C55 188 61 182 61 175 L61 115 L64 115 L64 175 C64 182 70 188 77 188 C84 188 90 182 90 175 L90 80 L97 80 L97 115 C97 120 101 124 106 124 C111 124 115 120 115 115 L115 75 C115 65 110 60 100 60 Z" />
+                        </svg>
+                        <div class="water-wave-fill" id="waterFill"></div>
+                    </div>
+                    <div class="water-stats">
+                        <p id="waterCounter">0 / 8 Glasses</p>
+                        <button class="btn-gradient" style="padding: 8px 16px; font-size: 0.85rem;" onclick="addWater()">+ Drink Glass</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="text-align: center;">
+                <h3>⚡ Daily Distance Goal</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0;">Hit 5 km today to unlock celebration effects!</p>
+                <button class="btn-gradient" onclick="finishGoal()">Complete 5 km Goal 🎉</button>
+            </div>
+        </div>
+
+        <div class="view" id="view-challenges">
+            <div class="card">
+                <h3>🏆 Friend Challenges</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Compete with friends around Gauteng on distance and pace leaderboards.</p>
+                <button class="btn-gradient" style="margin-top: 10px;" onclick="simulateAction('Creating Challenge...')">+ New Challenge</button>
+            </div>
+        </div>
+
+        <div class="view" id="view-profile">
+            <div class="card">
+                <h3>👤 Runningtim Profile</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">Member since September 2026 • Gauteng</p>
+                <button class="btn-gradient" style="background: linear-gradient(135deg, #4E65FF, #92EFFD);" onclick="simulateAction('Syncing Data...')">Sync Cloud Data</button>
+            </div>
+        </div>
+
+        <nav class="bottom-nav">
+            <button class="nav-item active" onclick="switchTab('home', this)">
+                <span>🏠</span> Home
+            </button>
+            <button class="nav-item" onclick="switchTab('challenges', this)">
+                <span>🏆</span> Challenges
+            </button>
+            <button class="nav-item" onclick="switchTab('profile', this)">
+                <span>👤</span> Profile
+            </button>
+        </nav>
+
+    </div>
+
+    <script>
+        function switchTab(viewId, element) {
+            const loader = document.getElementById('loaderOverlay');
+            const loaderText = document.getElementById('loaderText');
+            loaderText.innerText = `Loading ${viewId.toUpperCase()}...`;
+            loader.style.display = 'flex';
+
+            document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+
+            setTimeout(() => {
+                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                document.getElementById(`view-${viewId}`).classList.add('active');
+                loader.style.display = 'none';
+            }, 600);
+        }
+
+        let glasses = 0;
+        const maxGlasses = 8;
+
+        function addWater() {
+            if (glasses < maxGlasses) {
+                glasses++;
+            } else {
+                glasses = 0;
+            }
+            
+            let percentage = (glasses / maxGlasses) * 100;
+            document.getElementById('waterFill').style.height = percentage + '%';
+            document.getElementById('waterCounter').innerText = `${glasses} / ${maxGlasses} Glasses`;
+
+            if (glasses === maxGlasses) {
+                triggerConfetti();
+            }
+        }
+
+        function finishGoal() {
+            confetti({
+                particleCount: 120,
+                spread: 80,
+                origin: { y: 0.6 }
+            });
+        }
+
+        const aiTips = [
+            "\"High altitude increases breath rate and fluid evaporation. Ensure you sip water consistently before your run today!\"",
+            "\"Post-run recovery tip: Combine slow stretching with deep breathing to lower your heart rate naturally in the Highveld air.\"",
+            "\"Fuel smart: A light carbohydrate snack 45 minutes before hitting the trail will give you steady endurance without cramping.\"",
+            "\"Consistency beats intensity! Keeping a steady conversational pace builds your baseline endurance faster over time.\""
+        ];
+        let currentTipIndex = 0;
+
+        function nextAITip() {
+            currentTipIndex = (currentTipIndex + 1) % aiTips.length;
+            document.getElementById('aiTip').innerText = aiTips[currentTipIndex];
+        }
+
+        function simulateAction(text) {
+            const loader = document.getElementById('loaderOverlay');
+            document.getElementById('loaderText').innerText = text;
+            loader.style.display = 'flex';
+            setTimeout(() => {
+                loader.style.display = 'none';
+                triggerConfetti();
+            }, 800);
+        }
+
+        function triggerConfetti() {
+            confetti({
+                particleCount: 80,
+                spread: 60,
+                origin: { y: 0.7 }
+            });
+        }
+    </script>
+</body>
+</html>
